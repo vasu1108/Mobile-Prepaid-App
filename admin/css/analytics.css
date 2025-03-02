@@ -1,0 +1,40 @@
+/* Analytics Page Specific Styles */
+.card {
+    background-color: #FFFFFF;
+    border: none;
+    box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.card-title {
+    color: #1A1F2C;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .chart-container {
+        height: 250px;
+    }
+}
+/* iPhone XR Specific Media Queries (414px) */
+@media screen and (max-width: 414px) {
+    .card {
+        margin: 0.5rem 0;
+    }
+    .card-body {
+        padding: 1rem;
+    }
+    .chart-container {
+        height: 200px;
+    }
+    .card-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+}

@@ -1,0 +1,60 @@
+.field-group {
+    position: relative;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.field-group:hover {
+    background-color: #f8f9fa;
+}
+
+.field-label {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.field-value {
+    font-size: 1rem;
+}
+
+.edit-button {
+    position: absolute;
+    right: 1rem;
+    top: 60%;
+    transform: translateY(-50%);
+    opacity: 1;
+    transition: opacity 0.2s;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.non-editable-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-left: 1rem;
+}
+
+@media (max-width: 768px) {
+    .edit-button {
+        display: none;
+    }
+}
+
+.field-input {
+    width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: transparent;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.field-input:focus {
+    outline: none;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    background: white;
+}

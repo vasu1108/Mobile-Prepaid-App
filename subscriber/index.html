@@ -1,0 +1,269 @@
+                                                                                            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobi-comm Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav  class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3" style="background-color: #424B54;">
+    <div class="container-xxl">
+        <a class="navbar-brand" href="#">
+            <img src="./assets/logo-transparent-png.png" height="40" alt="Logo"><br>
+            
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: white;">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link fw-medium" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="prepaid plans.html">Prepaid</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="support.html">Support</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="help.html">FAQ</a></li>
+                
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-center"> 
+                <li class="nav-item"><a class="nav-link fw-medium text-danger" href="login.html">Sign In</a></li>
+                <li><div class="dropdown">
+                    <a class="nav-link profile-icon dropdown-toggle text-white" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-4"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="Account.html">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="profile.html">My Account</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </div></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Carousel -->
+<div id="carouselExampleIndicators" class="carousel slide mt-5" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active mt-5" data-bs-interval="3000">
+            <img src="./assets/istockphoto-1487069598-612x612 (1) (1).jpg" class="d-block w-100 " alt="Slide 1" style="object-fit: cover; height: 500px;">
+        </div>
+        <div class="carousel-item mt-5" data-bs-interval="3000">
+            <img src="./assets/two-female-friends-hugging-laughing-talking-while-enjoying-fun-moment-phone_981640-82838 (1).jpg" class="d-block w-100" alt="Slide 2" style="object-fit: cover; width: 500px; height: 500px">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Main Content -->
+<div class="container my-5">
+    <div class="row g-4">
+        <div class="col-md-6 ">
+            <div id="recharge" class="card shadow-sm rounded-4 p-4 " style="background-color: #C6C7C4;">
+                <h2 class="fs-2 fw-bold mb-4">Quick recharge</h2>
+                <div class="input-group">
+                    <input type="text" id="mobileNumber" class="form-control" placeholder="Mobile number" maxlength="10" oninput="validateMobile(this)">
+                    <a id="submitLink" href="prepaid plans.html">
+                        <button id="submitButton" class="btn btn-dark rounded-4 ms-2" disabled>
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            
+                <h2 class="fs-3 fw-bold">Want more personalized experience?</h2>
+                <p class="fs-5">Log in to track your usage and plan validity</p>
+                <a href="login.html"><button class="btn btn-dark">Log in</button></a>
+             
+        </div>
+        <div class="col-md-6 ">
+            <div class="card shadow-sm  rounded-4 p-4 text-dark" style="background-color: #C6C7C4;">
+                <h2 class="fs-3 fw-bold">Amazing prepaid Plans</h2>
+                  <p class="fs-5">Choose from a variety of prepaid plans</p>
+                  <p class="fs-5">Get unlimited calls, high-speed data, and exciting benefits.</p>
+                  <a id="submitLink" href="prepaid plans.html">
+                  <button type="button" class="btn btn-dark">View Plans</button></a>
+            </div>
+  </div>
+  
+      <div class="col-md-6">
+            
+        <h2 class="fs-3 fw-bold">High-Speed Data Packs</h2>
+        <p class="fs-5">Enjoy blazing-fast internet with our high-speed data packs. Stream, browse, and download without limits!
+            Stay connected anytime, anywhere with uninterrupted speed. Choose the perfect plan and experience seamless connectivity.
+        </p>
+        
+     
+</div>
+    </div>
+</div>
+
+<!-- <div class="container mt-5">
+    <div class="row content-left mb-4">
+        <div class="col-md-6">
+            <img src="https://via.placeholder.com/500" alt="Mobile Prepaid Recharge Image 1">
+        </div>
+        <div class="col-md-6">
+            <h2>Enjoy Blazing Fast Internet</h2>
+            <p>Recharge your mobile prepaid plan and experience blazing fast internet speeds. Stay connected with your loved ones and enjoy uninterrupted browsing, streaming, and more.</p>
+        </div>
+    </div>
+    <div class="row content-right">
+        <div class="col-md-6 order-md-2">
+            <img src="https://via.placeholder.com/500" alt="Mobile Prepaid Recharge Image 2">
+        </div>
+        <div class="col-md-6 order-md-1">
+            <h2>Unlimited Calls and Texts</h2>
+            <p>Get unlimited calls and texts with our prepaid recharge plans. Never miss an important conversation and stay in touch with your friends and family without worrying about call charges.</p>
+        </div>
+    </div>
+</div> -->
+
+
+        <div class="container py-3 py-md-5">
+          <div class="section-container p-3 p-md-5">
+              <!-- Header -->
+              <div class="text-center mb-4 mb-md-5">
+                  <h1 class="fw-bold">
+                      Most popular
+                      <span>prepaid plans</span>
+                  </h1>
+              </div>
+  
+              <div class="container py-3 py-md-5">
+                <!-- <div class="section-container p-3 p-md-5"> -->
+                    <div class="row g-4" id="plansContainer">
+                        <!-- Plans will be dynamically inserted here -->
+                    </div>
+                <!-- </div> -->
+            </div>
+              
+          </div>
+      </div>
+  
+       <!-- Modal -->
+    <div class="modal fade" id="rechargeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white">Enter Mobile Number</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="selectedPlanInfo" class="bg-light p-3 rounded mb-3">
+                        <!-- Selected plan details will be shown here -->
+                    </div>
+                    <div class="mb-3">
+                        <input type="tel" class="form-control" id="mobileNumber" placeholder="Enter mobile number" maxlength="10">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="payment.html"><button type="button" class="btn btn-danger" id="proceedBtn" disabled>Confirm</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="rechargeModal1" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white">Confirm recharge</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="selectedPlanInfo" class="bg-light p-3 rounded mb-3">
+                        <!-- Selected plan details will be shown here -->
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="payment.html"><button type="button" class="btn btn-danger" id="proceedBtn">Proceed</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid d-flex flex-column bg-dark">
+        <footer class="py-5 px-md-5">
+            <div class="row justify-content-center g-4">
+                <div class="col-12 col-md-3">
+                    <div class="footer-section">
+                        <div style="width: 60px; height: 60px;">
+                            <img src="./assets/logo-transparent-png.png" alt="Mobi Recharge logo" class="img-fluid">
+                        </div>
+                        <h2 class="footer-title mt-3">Mobi-Comm</h2>
+                        <p class="company-description">
+                            Mobi-Comm provides seamless prepaid mobile recharge services with secure transactions.
+                        </p>
+                        <div class="d-flex gap-2 mt-4">
+                            <img src="./assets/fb.png" class="social-icon" alt="Facebook">
+                            <img src="./assets/x.png" class="social-icon" alt="Twitter">
+                            <img src="./assets/insta.png" class="social-icon" alt="Instagram">
+                            <img src="./assets/in.png" class="social-icon" alt="LinkedIn">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="footer-section">
+                        <h2 class="footer-title">About Us</h2>
+                        <a href="#" class="footer-link">Company Info</a>
+                        <a href="#" class="footer-link">Investor Relations</a>
+                        <a href="#" class="footer-link">News & Media</a>
+                        <a href="#" class="footer-link">Careers</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="footer-section">
+                        <h2 class="footer-title">Services</h2>
+                        <a href="#" class="footer-link">Prepaid Plans</a>
+                        <a href="#" class="footer-link">5G plans</a>
+                        <a href="#" class="footer-link">Data Plans</a>
+                        <a href="#" class="footer-link">Recharge for Others</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="footer-section">
+                        <h2 class="footer-title">Support</h2>
+                        <a href="#" class="footer-link">FAQs</a>
+                        <a href="#" class="footer-link">Contact Us</a>
+                        <a href="#" class="footer-link">Refund Policy</a>
+                        <a href="#" class="footer-link">Recharge History</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="footer-section">
+                        <h2 class="footer-title">Legal</h2>
+                        <a href="#" class="footer-link">Privacy Policy</a>
+                        <a href="#" class="footer-link">Terms of Service</a>
+                        <a href="#" class="footer-link">Security Awareness</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="./js/index.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

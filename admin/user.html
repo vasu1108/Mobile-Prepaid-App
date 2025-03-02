@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body>
+     <!-- Top Navigation -->
+     <nav class="top-nav fixed-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <button type="button" id="sidebarCollapse" class="btn">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="nav-links ms-4">
+                        <a href="#" class="active">Overview</a>
+                        <a href="#">Analytics</a>
+                        <a href="#">Reports</a>
+                    </div>
+                </div>
+                <div class="profile-section">
+                    <div class="notifications">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="profile-menu">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User" alt="Profile" class="profile-img">
+                        <span class="ms-2">Admin User</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Panel</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="index.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                </li>
+                <li class="active">
+                    <a href="user.html"><i class="bi bi-people"></i> Users</a>
+                </li>
+                <li>
+                    <a href="plans.html"><i class="bi bi-phone"></i> Plans</a>
+                </li>
+                <li>
+                    <a href="transactions.html"><i class="bi bi-cash-stack"></i> Transactions</a>
+                </li>
+                <li>
+                    <a href="analytics.html"><i class="bi bi-bar-chart"></i> Analytics</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="content">
+            
+            <div class="container mt-4">
+                <!-- Search and Sort Section -->
+                <div class="search-section card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search users...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filterField" class="form-select">
+                                    <option value="all">Search in all fields</option>
+                                    <option value="name">Name</option>
+                                    <option value="mobile">Mobile No</option>
+                                    <option value="plan">Plan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="sortBy" class="form-select">
+                                    <option value="name">Sort by Name</option>
+                                    <option value="expiryDate">Sort by Expiry Date</option>
+                                    <option value="planPrice">Sort by Plan Price</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select id="sortOrder" class="form-select">
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row text-center">
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="card stats-card" id="activeUsersCard">
+                            <h5>Active Users</h5>
+                            <p id="activeUsersCount">0</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="card stats-card" id="allUsersCard">
+                            <h5>All Users</h5>
+                            <p id="allUsersCount">0</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="card stats-card" id="inactiveUsersCard">
+                            <h5>Inactive Users</h5>
+                            <p id="inactiveUsersCount">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table mt-4">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile No</th>
+                                <th>Plan</th>
+                                <th>Plan Price</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User History Modal -->
+<div class="modal fade" id="historyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">User Details & Recharge History</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <div class="user-details mb-4">
+                    <h6>User Details</h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><strong>Name:</strong> <span id="modalUserName"></span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Mobile:</strong> <span id="modalUserMobile"></span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Email:</strong> <span id="modalUserEmail"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <h6>Recharge History</h6>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Plan</th>
+                                <th>Price</th>
+                                <th>Validity</th>
+                                <th>Data</th>
+                                <th>Calls</th>
+                                <th>SMS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add html2pdf.js for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/user.js"></script>
+</body>
+</html>
