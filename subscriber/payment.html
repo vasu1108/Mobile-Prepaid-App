@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Methods</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/payment.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+<nav  class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3 mb-4" style="background-color: #424B54;">
+    <div class="container-xxl">
+        <a class="navbar-brand" href="index.html">
+            <img src="./assets/logo-transparent-png.png" height="40" alt="Logo"><br>
+            
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: white;">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link fw-medium" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="prepaid plans.html">Prepaid</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="support.html">Support</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="help.html">FAQ</a></li>
+                
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-center"> 
+                <li class="nav-item"><a class="nav-link fw-medium text-danger" href="login.html">Sign In</a></li>
+                <li><div class="dropdown">
+                    <a class="nav-link profile-icon dropdown-toggle text-white" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-4"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="Account.html">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="profile.html">My Account</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </div></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <div class="container d-flex justify-content-center align-items-center text-center py-4" style="margin-top: 100px;">
+        <div class="col-lg-6 col-md-8 col-12">
+            <h2 class="fs-3 fw-bold">Fast and Secure payment</h2>
+            <p class="fs-5">Enjoy hassle-free payments with our fast and secure checkout. Recharge your number in just a few clicks!</p>
+        </div>
+    </div>
+    
+    <div class="container main-container mt-5">
+        <div class="row g-4">
+            <!-- Plan Details Container -->
+            <div class="col-12 col-lg-4 mb-4">
+                <div class="plan-details-container h-100">
+                    <div class="plan-header">
+                        <h4>Recharge for</h4>
+                        <div class="mobile-number">+91 9876543210</div>
+                        <!-- <div class="change-number-link"><a href="#"><i class="fas fa-edit"></i> Change number</a></div> -->
+                    </div>
+                    <div class="plan-info">
+                        <h5>Plan Details</h5>
+                        <div class="plan-price">₹499</div>
+                        <div class="plan-validity">Validity: 84 days</div>
+                        
+                        <div class="plan-feature">
+                            <i class="fas fa-wifi"></i>
+                            <div class="feature-details">
+                                <div class="feature-name">Data</div>
+                                <div class="feature-value">2GB/day</div>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-feature">
+                            <i class="fas fa-phone-alt"></i>
+                            <div class="feature-details">
+                                <div class="feature-name">Calls</div>
+                                <div class="feature-value">Unlimited</div>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-feature">
+                            <i class="fas fa-comment-sms"></i>
+                            <div class="feature-details">
+                                <div class="feature-name">SMS</div>
+                                <div class="feature-value">100/day</div>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-addon">
+                            <div class="addon-badge">Premium</div>
+                            <div class="addon-name">Disney+ Hotstar Mobile</div>
+                        </div>
+                    </div>
+                    <div class="change-plan-button">
+                        <a href="prepaid plans.html">
+                        <button class="btn btn-outline-danger w-100">Change Plan</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Container -->
+            <div class="col-12 col-lg-8 mb-4">
+                <div class="payment-container h-100">
+                    <div class="row g-4 h-100">
+                        <!-- Payment Methods List -->
+                        <div class="col-12 col-md-4">
+                            <div class="payment-methods">
+                                <div class="method-item active" data-target="upi-section">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-angle-right"></i>
+                                        <span>UPI</span>
+                                    </div>
+                                </div>
+                                <div class="method-item" data-target="card-section">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>credit/debit cards</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="method-item" data-target="netbanking-section">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-globe"></i>
+                                        <span>netbanking</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Forms Container -->
+                        <div class="col-12 col-md-8">
+                            <!-- UPI Payment Section -->
+                            <div class="payment-form payment-section active" id="upi-section">
+                                <h4 class="mb-4">pay using UPI</h4>
+                                
+                                <div>
+                                    <h5>UPI ID</h5>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="enter UPI ID">
+                                        <!-- <small class="text-muted d-flex align-items-center mt-2">
+                                            <i class="fas fa-lock me-2"></i>
+                                            Your ID will be encrypted and is 100% safe with us
+                                        </small> -->
+                                    </div>
+                                    <button id="pay-btn" class="btn btn-dark" onclick="validatePayment()">
+                                        verify & pay
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Credit/Debit Card Section -->
+                            <div class="payment-form payment-section" id="card-section">
+                                <h4 class="mb-4">credit/debit cards</h4>
+                                <form>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="enter card number here">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="card holder name">
+                                    </div>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-8 col-md-6">
+                                            <input type="text" class="form-control" placeholder="MM / YY">
+                                        </div>
+                                        <div class="col-4 col-md-6">
+                                            <input type="text" class="form-control" placeholder="CVV">
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="pay-btn" class="btn btn-dark" onclick="validatePayment()">
+                                        pay now
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Netbanking Section -->
+                            <div class="payment-form payment-section" id="netbanking-section">
+                                <h4 class="mb-4">net banking</h4>
+                                <div class="bank-options">
+                                    <div class="d-flex">
+                                        <div>
+                                            <div class="bank-option">
+                                                <img src="./assets/HDFC.png" alt="HDFC" class="bank-logo">
+                                                <span>HDFC</span>
+                                                <input type="radio" name="bank" class="bank-radio">
+                                            </div>
+                                            <div class="bank-option">
+                                                <img src="./assets/SBI.png" alt="SBI" class="bank-logo">
+                                                <span>SBI</span>
+                                                <input type="radio" name="bank" class="bank-radio">
+                                            </div>
+                                            <div class="bank-option">
+                                                <img src="./assets/axis.png" alt="Axis" class="bank-logo">
+                                                <span>Axis</span>
+                                                <input type="radio" name="bank" class="bank-radio">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="bank-option">
+                                                <img src="./assets/KOTAK.png" alt="Kotak" class="bank-logo">
+                                                <span>Kotak</span>
+                                                <input type="radio" name="bank" class="bank-radio">
+                                            </div>
+                                            <div class="bank-option">
+                                                <img src="./assets/ICICI.png" alt="ICICI" class="bank-logo">
+                                                <span>ICICI</span>
+                                                <input type="radio" name="bank" class="bank-radio">
+                                            </div>
+                                            <div class="bank-option">
+                                                <img src="./assets/Bank_of_Baroda.webp" alt="BOB" class="bank-logo">
+                                                <span>Bank of Baroda</span>
+                                                <input type="radio" name="bank" class="bank-radio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <select class="other-bank-select mt-3">
+                                        <option value="">other bank</option>
+                                        <option value="pnb">Punjab National Bank</option>
+                                        <option value="bob">Canara bank</option>
+                                        <option value="iob">Indian Overseas Bank</option>
+                                    </select><br>
+                                    <button type="submit" id="pay-btn" class="btn btn-dark mt-3" onclick="validatePayment()">
+                                        pay now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal HTML -->
+    <!-- Success Modal HTML with Transaction Details and Invoice Download -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="success-animation mb-4">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+                <h4>Payment Successful!</h4>
+                <p>Your plan will be activated soon.</p>
+                
+                <div class="transaction-details">
+                    <div class="transaction-row">
+                        <span class="transaction-label">Transaction ID:</span>
+                        <span id="transactionId" class="transaction-value"></span>
+                    </div>
+                    <div class="transaction-row">
+                        <span class="transaction-label">Payment Mode:</span>
+                        <span id="paymentMode" class="transaction-value"></span>
+                    </div>
+                    <div class="transaction-row">
+                        <span class="transaction-label">Amount Paid:</span>
+                        <span id="amountPaid" class="transaction-value">₹499</span>
+                    </div>
+                    <div class="transaction-row">
+                        <span class="transaction-label">Date & Time:</span>
+                        <span id="paymentDateTime" class="transaction-value"></span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions mt-4">
+                    <button id="downloadInvoice" class="btn btn-success me-2">
+                        <i class="fas fa-download me-2"></i>Download Invoice
+                    </button>
+                    <a href="index.html"><button class="btn btn-dark" data-bs-dismiss="modal">Close</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/payment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>

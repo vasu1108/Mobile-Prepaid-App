@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobi-comm Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+    
+<!-- Navigation -->
+<nav  class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3" style="background-color: #424B54;">
+    <div class="container-xxl">
+        <a class="navbar-brand" href="index.html">
+            <img src="./assets/logo-transparent-png.png" height="40" alt="Logo"><br>
+            
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: white;">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link fw-medium" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="prepaid plans.html">Prepaid</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="support.html">Support</a></li>
+                <li class="nav-item"><a class="nav-link fw-medium" href="help.html">FAQ</a></li>
+                
+            </ul>
+            <!-- <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link fw-medium text-danger" href="#">Sign In</a></li>
+                
+            </ul> -->
+        </div>
+    </div>
+</nav>
+
+
+    <main class="container-fluid p-0">
+        <div class="row g-0 login-container bg-danger text-white">
+            <div class="col-12 col-md-6 d-flex align-items-center">
+                <img src="./assets/bundle-iot-isometric-icon_9206-15995.jpg" 
+                     alt="Mobi-comm" 
+                     class="login-image">
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="login-form d-flex flex-column justify-content-center h-100 px-5 py-5">
+                    <form id="mobileView" onsubmit="handleSubmit(event)" class="max-width-420">
+                        <h1 class="fw-bold fs-1 mb-2">Login to Mobi-comm</h1>
+                        <h2 class="fs-4 mb-4">to manage your prepaid<br>account and track usage</h2>
+                        <div class="mt-4 mb-4">
+                            <input type="tel" 
+                                   id="mobileNumber"
+                                   class="form-control mobile-input"
+                                   placeholder="enter your mobile number"
+                                   pattern="[0-9]{10}"
+                                   maxlength="10"
+                                   oninput="validateMobile(this)">
+                        </div>
+                        <button type="submit" id="submitButton" class="custom-button text-black" disabled>send OTP</button>
+                    </form>
+
+                    <div id="otpView" class="max-width-420">
+                        <h1 class="fw-bold fs-1 mb-2">Login to Mobi-comm</h1>
+                        <h2 class="fs-4 mb-4">easy to handle account experience</h2>
+                        <div class="mt-4">
+                            <label class="text-white">enter a valid otp</label>
+                            <div class="otp-container">
+                                <input type="text" class="otp-input text-center" maxlength="1" data-index="0" oninput="handleOtpInput(this)">
+                                <input type="text" class="otp-input text-center" maxlength="1" data-index="1" oninput="handleOtpInput(this)">
+                                <input type="text" class="otp-input text-center" maxlength="1" data-index="2" oninput="handleOtpInput(this)">
+                                <input type="text" class="otp-input text-center" maxlength="1" data-index="3" oninput="handleOtpInput(this)">
+                            </div>
+                        </div>
+                        <p class="text-white mb-4" id="otpMessage"></p>
+                        <div class="d-flex flex-column gap-3">
+                            <button type="button" id="verifyButton" class="verify-button" disabled onclick="handleLogin()">verify</button>
+                            <span id="resendTimer" class="resend-text text-white"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="container-fluid d-flex flex-column bg-dark">
+      <footer class="py-5 px-md-5">
+          <div class="row justify-content-center g-4">
+              <div class="col-12 col-md-3">
+                  <div class="footer-section">
+                      <div style="width: 60px; height: 60px;">
+                          <img src="./assets/logo-transparent-png.png" alt="Mobi Recharge logo" class="img-fluid">
+                      </div>
+                      <h2 class="footer-title mt-3">Mobi-Comm</h2>
+                      <p class="company-description">
+                          Mobi-Comm provides seamless prepaid mobile recharge services with secure transactions.
+                      </p>
+                      <div class="d-flex gap-2 mt-4">
+                        <img src="./assets/fb.png" class="social-icon" alt="Facebook">
+                        <img src="./assets/x.png" class="social-icon" alt="Twitter">
+                        <img src="./assets/insta.png" class="social-icon" alt="Instagram">
+                        <img src="./assets/in.png" class="social-icon" alt="LinkedIn">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-12 col-md-2">
+                  <div class="footer-section">
+                      <h2 class="footer-title">About Us</h2>
+                      <a href="#" class="footer-link">Company Info</a>
+                      <a href="#" class="footer-link">Investor Relations</a>
+                      <a href="#" class="footer-link">News & Media</a>
+                      <a href="#" class="footer-link">Careers</a>
+                  </div>
+              </div>
+              <div class="col-12 col-md-2">
+                  <div class="footer-section">
+                      <h2 class="footer-title">Services</h2>
+                      <a href="#" class="footer-link">Prepaid Plans</a>
+                      <a href="#" class="footer-link">5G plans</a>
+                      <a href="#" class="footer-link">Data Plans</a>
+                      <a href="#" class="footer-link">Recharge for Others</a>
+                  </div>
+              </div>
+              <div class="col-12 col-md-2">
+                  <div class="footer-section">
+                      <h2 class="footer-title">Support</h2>
+                      <a href="#" class="footer-link">FAQs</a>
+                      <a href="#" class="footer-link">Contact Us</a>
+                      <a href="#" class="footer-link">Refund Policy</a>
+                      <a href="#" class="footer-link">Recharge History</a>
+                  </div>
+              </div>
+              <div class="col-12 col-md-2">
+                  <div class="footer-section">
+                      <h2 class="footer-title">Legal</h2>
+                      <a href="#" class="footer-link">Privacy Policy</a>
+                      <a href="#" class="footer-link">Terms of Service</a>
+                      <a href="#" class="footer-link">Security Awareness</a>
+                  </div>
+              </div>
+          </div>
+      </footer>
+  </div>
+  
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let resendInterval, remainingTime = 37;
+
+        const validateMobile = input => {
+            input.value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+            document.getElementById('submitButton').disabled = input.value.length !== 10;
+        };
+
+        function handleOtpInput(input) {
+            const value = input.value;
+            const index = parseInt(input.dataset.index);
+            
+            // Allow only numbers
+            if (!/^\d*$/.test(value)) {
+                input.value = '';
+                return;
+            }
+
+            // Auto-focus next input
+            if (value && index < 3) {
+                const nextInput = document.querySelector(`[data-index="${index + 1}"]`);
+                nextInput?.focus();
+            }
+
+            // Enable/disable verify button
+            const allInputs = document.querySelectorAll('.otp-input');
+            const otp = Array.from(allInputs).map(input => input.value).join('');
+            document.getElementById('verifyButton').disabled = otp.length !== 4;
+        }
+
+        function updateResendTimer() {
+            const resendTimer = document.getElementById('resendTimer');
+            if (remainingTime > 0) {
+                resendTimer.textContent = `resend otp in ${remainingTime} sec`;
+                remainingTime--;
+            } else {
+                clearInterval(resendInterval);
+                resendTimer.textContent = 'resend otp';
+                resendTimer.style.cursor = 'pointer';
+                resendTimer.onclick = handleResendOTP;
+            }
+        }
+
+        function handleResendOTP() {
+            remainingTime = 37;
+            updateResendTimer();
+            resendInterval = setInterval(updateResendTimer, 1000);
+            // Clear OTP inputs
+            document.querySelectorAll('.otp-input').forEach(input => input.value = '');
+            document.getElementById('verifyButton').disabled = true;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            document.getElementById('mobileView').style.display = 'none';
+            document.getElementById('otpView').style.display = 'block';
+            document.getElementById('otpMessage').textContent = `OTP has been sent to your number XXXXXX${mobileNumber.slice(-4)}`;
+            handleResendOTP();
+            // Focus first OTP input
+            document.querySelector('.otp-input').focus();
+        }
+        function handleLogin() {
+         event.preventDefault();
+
+          // Assuming login is successful after OTP verification or form submission
+          localStorage.setItem("isLoggedIn", "true");
+          window.location.href = "Account.html"; // Redirect to Home or any other page
+        }
+    </script>
+</body>
+</html>

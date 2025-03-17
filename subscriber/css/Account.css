@@ -1,0 +1,141 @@
+
+body { background-color: #F8F8F8; }
+.navbar-toggler-icon {
+   filter: invert(1);
+}
+.nav-link {
+    color: whitesmoke;
+}
+ .nav-link:hover {
+  color:  #E60000
+ }
+.nav-link:focus, .nav-link:active {
+  color:  #E60000 !important;
+}
+.nav-item.active .nav-link {
+  color: #E60000 !important;
+}
+ .nav-link .active {
+   color: #E60000;
+ }
+/* .banner {
+    background: linear-gradient(90deg, #FFE8BA 0%, #FFF8E7 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+}
+.banner-image {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    max-height: 120px;
+} */
+#recharge {
+    color: whitesmoke;
+}
+.data-card {
+    background-color: rgb(234, 219, 158);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.utility-icon {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+.action-button {
+    background-color: var(--vi-red);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 24px;
+}
+.feature-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+.feature-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    color: inherit;
+}
+.utility-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+.utility-item {
+    text-align: center;
+    text-decoration: none;
+    color: var(--vi-dark);
+}
+.download-card {
+    background-color: #F5F6F7;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.footer-link {
+color: whitesmoke;
+text-decoration: none;
+font-size: 14px;
+line-height: 1.75rem;
+display: block;
+cursor: pointer;
+}
+.footer-link:hover {
+color: #E60000;
+}
+.footer-title {
+color: whitesmoke;
+font-size: 17px;
+font-weight: bold;
+padding-bottom: 25px;
+line-height: 1;
+}
+.social-icon {
+width: 24px;
+height: 24px;
+cursor: pointer;
+transition: opacity 0.2s;
+}
+.social-icon:hover {
+opacity: 0.8;
+}
+.company-description {
+color: whitesmoke;
+font-size: 12px;
+line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+.footer-section {
+  padding: 0 1.25rem;
+}
+}
+.profile-icon::after {
+    display: none !important; /* Hides the dropdown arrow */
+}
+
+/* Hover effect for dropdown items */
+.dropdown-item:hover {
+    background-color: #b6b7b7 !important; /* Change background color on hover */
+    color: white !important; /* Change text color on hover */
+}

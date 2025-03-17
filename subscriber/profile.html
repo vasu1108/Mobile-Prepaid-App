@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light" >
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center " >
+        <div class="card shadow-sm w-100" style="max-width: 600px; " >
+            <div class="card-body">
+                <a href="Account.html" class="btn btn-light rounded-circle p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" class="bi bi-arrow-left" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+                <h3 class="mb-4">Account Settings</h3>
+                <div id="settings-form"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const userData = {
+            name: 'Shreenivasan S',
+            dob: '08 Nov, 2003',
+            mobile: '9876543210',
+            alternateContact: '8838523369',
+            email: 'user@example.com',
+            communicationLanguage: 'EN',
+            workDetails: 'Software Engineer',
+            address: '4-13, Dharmaiyan street no -3, Salem, Salem, Tn-636006'
+        };
+        
+        const nonEditableFields = ['dob', 'mobile', 'address'];
+        
+        function createField(key, value) {
+            const fieldGroup = document.createElement('div');
+            fieldGroup.className = 'mb-3';
+        
+            const label = document.createElement('label');
+            label.className = 'form-label fw-bold';
+            label.textContent = formatLabel(key);
+        
+            const valueContainer = document.createElement('div');
+            
+            if (nonEditableFields.includes(key)) {
+                valueContainer.innerHTML = `<p class='form-control-plaintext text-muted'>${value} <span class='text-secondary'>(Not editable)</span></p>`;
+            } else {
+                valueContainer.innerHTML = `<div class='input-group'>
+                    <input type='text' class='form-control' value='${value}' readonly />
+                    <button class='btn btn-outline-secondary edit-btn'>Edit</button>
+                </div>`;
+            }
+        
+            fieldGroup.appendChild(label);
+            fieldGroup.appendChild(valueContainer);
+            return fieldGroup;
+        }
+        
+        function formatLabel(key) {
+            return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+        }
+        
+        function initializeForm() {
+            const form = document.getElementById('settings-form');
+            for (const [key, value] of Object.entries(userData)) {
+                form.appendChild(createField(key, value));
+            }
+        
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.previousElementSibling;
+                    input.readOnly = false;
+                    input.focus();
+                    this.textContent = 'Save';
+                    
+                    this.addEventListener('click', () => {
+                        input.readOnly = true;
+                        this.textContent = 'Edit';
+                    }, { once: true });
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', initializeForm);
+    </script>
+</body>
+</html>
