@@ -1,322 +1,397 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const loginLink = document.querySelector(".nav-link.text-danger"); // Selects the "Sign In" link
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-  
-    
-  })
-  
-//   document.addEventListener("DOMContentLoaded", function () {
-//     document.querySelectorAll(".faq-item").forEach(item => {
-//         item.addEventListener("click", function () {
-//             let answer = this.querySelector(".faq-answer");
-//             let icon = this.querySelector(".faq-icon");
-
-//             if (answer.style.display === "block") {
-//                 answer.style.display = "none";
-//                 icon.textContent = "+";
-//             } else {
-//                 answer.style.display = "block";
-//                 icon.textContent = "-";
-//             }
-//         });
-//     });
-// });
-
-document.addEventListener("DOMContentLoaded", function () {
+    // Setup FAQ interaction
     document.querySelectorAll(".faq-item").forEach(item => {
         item.addEventListener("click", function () {
             this.classList.toggle("active");
         });
     });
-});
 
-let selectedPlan = null;
-const modal = new bootstrap.Modal(document.getElementById('rechargeModal'));
-const modal1 = new bootstrap.Modal(document.getElementById('rechargeModal1'));
-const data = '349'
-const plansData = {
-    "Popular": [
-        { cost: `${data}`, validity: "28 Days", data: "1.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "3 months of Jio Hotstar mobile" },
-        { cost: "399", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "3 months of Jio Hotstar mobile" },
-        { cost: "399", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "3 months of Jio Hotstar mobile" },
-        { cost: "399", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "3 months of Jio Hotstar mobile" },
-        { cost: "399", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "3 months of Jio Hotstar mobile" },
-        { cost: "399", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "3 months of Jio Hotstar mobile" }
-    ],
-    "Validity": [
-        { cost: "599", validity: "84 Days", data: "1.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "599", validity: "84 Days", data: "1.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "599", validity: "84 Days", data: "1.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "599", validity: "84 Days", data: "1.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "599", validity: "84 Days", data: "1.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "699", validity: "90 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" }
-    ],
-    "Unlimited": [
-        { cost: "999", validity: "70 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "999", validity: "70 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "999", validity: "70 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "999", validity: "70 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "999", validity: "70 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "1199", validity: "84 Days", data: "3 GB/Day", sms: "100 SMS/day", calls: "Unlimited" }
-    ],
-    "OTT": [
-        { cost: "899", validity: "90 Days", data: "2.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "Jio Hotstar" },
-        { cost: "899", validity: "90 Days", data: "2.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "Jio Hotstar" },
-        { cost: "899", validity: "90 Days", data: "2.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "Jio Hotstar" },
-        { cost: "899", validity: "90 Days", data: "2.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "Jio Hotstar" },
-        { cost: "1499", validity: "84 Days", data: "3 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "1 Year of Netflix" },
-        { cost: "1499", validity: "84 Days", data: "3 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "1 Year of Netflix" }
-    ],
-    "Combo/Validity": [
-        { cost: "499", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "499", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "499", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "499", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "499", validity: "56 Days", data: "2 GB/Day", sms: "100 SMS/day", calls: "Unlimited" },
-        { cost: "799", validity: "84 Days", data: "1.5 GB/Day", sms: "100 SMS/day", calls: "Unlimited" }
-    ],
-    "Data": [
-        { cost: "299", validity: "28 Days", data: "4 GB", sms: "Existing Pack", calls: "Existing Pack" },
-        { cost: "299", validity: "28 Days", data: "4 GB", sms: "Existing Pack", calls: "Existing Pack" },
-        { cost: "299", validity: "28 Days", data: "4 GB", sms: "Existing Pack", calls: "Existing Pack" },
-        { cost: "299", validity: "28 Days", data: "4 GB", sms: "Existing Pack", calls: "Existing Pack" },
-        { cost: "299", validity: "28 Days", data: "4 GB", sms: "Existing Pack", calls: "Existing Pack" },
-        { cost: "199", validity: "28 Days", data: "2 GB", sms: "Existing Pack", calls: "Existing Pack" }
-    ],
-    "Others": [
-        {cost: "1499", validity: "84 Days", data: "3 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "1 Year of Netflix" },
-        { cost: "1499", validity: "84 Days", data: "3 GB/Day", sms: "100 SMS/day", calls: "Unlimited", benefits: "1 Year of Netflix" }],
-    "Top Up": [
-        { cost: "100", validity: "Unlimited", data: "No Data", sms: "No SMS", calls: "₹81.75 Talktime" },
-        { cost: "100", validity: "Unlimited", data: "No Data", sms: "No SMS", calls: "₹81.75 Talktime" },
-        { cost: "100", validity: "Unlimited", data: "No Data", sms: "No SMS", calls: "₹81.75 Talktime" },
-        { cost: "100", validity: "Unlimited", data: "No Data", sms: "No SMS", calls: "₹81.75 Talktime" },
-        { cost: "100", validity: "Unlimited", data: "No Data", sms: "No SMS", calls: "₹81.75 Talktime" },
-        { cost: "50", validity: "Unlimited", data: "No Data", sms: "No SMS", calls: "₹39.37 Talktime" }
-    ]
-};
+    // Show/hide login elements based on login status
+    const signInLink = document.querySelector(".nav-link.text-danger");
+    const profileIcon = document.querySelector(".profile-icon");
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-function displayPlans(category) {
-    const container = document.getElementById('plansContainer');
-    container.innerHTML = '';
-
-    plansData[category]?.forEach((plan, index) => {
-        const card = document.createElement('div');
-        card.className = 'col-12 col-md-6';
-
-        let badgeText = '';
-        let imgSrc = '';
-
-        if (plan.benefits?.includes('Hotstar')) {
-            badgeText = 'Premium Pack - Includes Hotstar';
-            imgSrc = 'Hotstar (1).svg';
-        } else if (plan.benefits?.includes('Netflix')) {
-            badgeText = 'Premium Pack - Includes Netflix';
-            imgSrc = 'netflixbasic.svg';
-        }
-
-        card.innerHTML = `
-            <div class="card shadow-sm rounded-4 p-4">
-                ${badgeText ? `<div class="plan-badge">${badgeText}</div>` : ''}
-                <div class="plan-card">
-                    <div class="card-header-content d-flex justify-content-between align-items-center mb-4">
-                        <div class="price-info">
-                            <div class="price">
-                                <span class="fs-5">₹</span>
-                                <span class="fs-2 fw-bold">${plan.cost}</span>
-                            </div>
-                            <div class="text-center">
-                                <div class="d-flex align-items-center">
-                                    <span class="fw-bold">${plan.data}</span>
-                                </div>
-                                <small class="text-muted">data</small>
-                            </div>
-                            <div class="text-center">
-                                <div class="d-flex align-items-center">
-                                    <span class="fw-bold">${plan.validity}</span>
-                                </div>
-                                <small class="text-muted">validity</small>
-                            </div>
-                        </div>
-                        <div class="buy-button-container">
-                            <button class="buy-button" id="buy-btn-${index}">buy</button>
-                        </div>
-                    </div>
-                    <hr>
-                    ${plan.benefits ? 
-                        `<div class="feature-item mt-4">
-                            ${imgSrc ? `<div><img src="${imgSrc}" width="40" height="40" alt="Benefit Image" class="img-fluid"></div>` : ''}
-                            <div>
-                                <p class="mb-2">${plan.benefits}</p>
-                                <small class="text-muted">
-                                    ${plan.calls} calls + ${plan.sms}<span class="text-decoration-underline" style="cursor: pointer;"></span>
-                                </small>
-                            </div>
-                        </div>` : 
-                        `<div class="feature-item mt-4">
-                            <small class="text-muted">
-                                ${plan.calls} calls + ${plan.sms}<span class="text-decoration-underline" style="cursor: pointer;"></span>
-                            </small>
-                        </div>`
-                    }
-                </div>
-            </div>
-        `;
-
-        container.appendChild(card);
-
-        // Attach event listener to the buy button
-        document.getElementById(`buy-btn-${index}`).addEventListener('click', () => handleBuyClick(category, index));
-    });
-}
-
-
-function handleBuyClick(category, index) {
-    selectedPlan = plansData[category][index];
-    showPlanDetails();
-    
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn) {
-        modal1.show();
+        if (signInLink) signInLink.style.display = "none";
+        if (profileIcon) profileIcon.style.display = "inline-block";
     } else {
-        modal.show();
+        if (signInLink) signInLink.style.display = "inline-block";
+        if (profileIcon) profileIcon.style.display = "none";
     }
-}
 
-function showPlanDetails() {
-    if (selectedPlan) {
-        let benefitImg = '';
+    // Initialize modals
+    const rechargeModal = new bootstrap.Modal(document.getElementById('rechargeModal'));
+    const rechargeModalLoggedIn = new bootstrap.Modal(document.getElementById('rechargeModal1'));
+    const ottDetailsModal = new bootstrap.Modal(document.getElementById('ottDetailsModal'));
+    let selectedPlan = null;
 
-        // Assign benefit image based on selected plan
-        if (selectedPlan.benefits?.includes('Hotstar')) {
-            benefitImg = 'Hotstar (1).svg';
-        } else if (selectedPlan.benefits?.includes('Netflix')) {
-            benefitImg = 'Netflix.svg';
-        }
-
-        document.querySelectorAll('#selectedPlanInfo').forEach(element => {
-            element.innerHTML = `
-                <div class="fw-bold fs-5 mb-2">Selected Plan</div>
-                <div class="small d-flex flex-column gap-2">
-                    <p class="mb-1 fs-6 fw-bold">
-                        <i class="bi bi-currency-rupee text-secondary"></i> ${selectedPlan.cost}
-                    </p>
-                    <p class="mb-1 fs-6">
-                        <i class="bi bi-calendar-check text-secondary"></i> ${selectedPlan.validity}
-                    </p>
-                    <p class="mb-1 fs-6">
-                        <i class="bi bi-wifi text-secondary"></i> Data: ${selectedPlan.data}
-                    </p>
-                    <p class="mb-1 fs-6">
-                        <i class="bi bi-telephone text-secondary"></i> Calls: ${selectedPlan.calls}
-                    </p>
-                    <p class="mb-1 fs-6">
-                        <i class="bi bi-chat-dots text-secondary"></i> SMS: ${selectedPlan.sms}
-                    </p>
-                    ${selectedPlan.benefits ? 
-                        `<div class="d-flex align-items-center mt-2 mb-0">
-                            ${benefitImg ? `<img src="${benefitImg}" width="40" height="40" alt="Benefit Image" class="me-2">` : ''}
-                            <p class="text-success fs-6 mb-0">${selectedPlan.benefits}</p>
-                        </div>` 
-                    : ''}
-                </div>
-            `;
-        });
+    // Fetch plans for the initially active category
+    const activeTab = document.querySelector('.nav-link.active');
+    if (activeTab) {
+        const initialCategory = activeTab.getAttribute('data-category');
+        fetchPlansByCategory(initialCategory);
     }
-}
 
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize with Popular plans
-    displayPlans('Popular');
-    
     // Set up category tab clicks
     document.querySelectorAll('.nav-link').forEach(tab => {
         tab.addEventListener('click', function(e) {
             e.preventDefault();
             const category = this.getAttribute('data-category');
-            if (category && plansData[category]) {
-                document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                displayPlans(category);
-            }
+            document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Fetch and display plans for the selected category
+            fetchPlansByCategory(category);
         });
     });
 
-    // Mobile number validation for first modal
+    // Mobile number validation for recharge modal
     const mobileInput = document.getElementById('mobileNumber');
     const proceedBtn = document.getElementById('proceedBtn');
     
-    
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileInput = document.getElementById('mobileNumber');
-    const proceedBtn = document.getElementById('proceedBtn');
-
     if (mobileInput && proceedBtn) {
         mobileInput.addEventListener('input', function() {
             this.value = this.value.replace(/\D/g, ''); // Allow only numbers
             proceedBtn.disabled = this.value.length !== 10;
         });
 
-        proceedBtn.addEventListener('click', function() {
+        proceedBtn.addEventListener('click', async function() {
             if (mobileInput.value.length === 10) {
-                modal.hide();
+                const mobileNumber = mobileInput.value;
+                
+                try {
+                    // Fetch user details for the entered mobile number
+                    const response = await fetch(`http://localhost:8083/users/mobile/${mobileNumber}`);
+                    
+                    if (response.ok) {
+                        const userData = await response.json();
+                        
+                        // Store user data in localStorage without setting isLoggedIn to true
+                        localStorage.setItem("currentUserDetails", JSON.stringify(userData));
+                        
+                        // Store mobile number for payment page
+                        localStorage.setItem('mobileNumber', mobileNumber);
+                        
+                        // Store selected plan
+                        if (selectedPlan) {
+                            localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+                        }
+                        
+                        // Redirect to payment page
+                        window.location.href = "payment.html";
+                    } else {
+                        // If user not found, just store the mobile number
+                        localStorage.setItem('mobileNumber', mobileNumber);
+                        
+                        // Store selected plan
+                        if (selectedPlan) {
+                            localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+                        }
+                        
+                        // Redirect to payment page
+                        window.location.href = "payment.html";
+                    }
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                    // In case of error, still proceed with the mobile number
+                    localStorage.setItem('mobileNumber', mobileNumber);
+                    
+                    // Store selected plan
+                    if (selectedPlan) {
+                        localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+                    }
+                    
+                    // Redirect to payment page
+                    window.location.href = "payment.html";
+                }
+                
+                rechargeModal.hide();
                 mobileInput.value = '';
                 proceedBtn.disabled = true;
             }
         });
     }
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".navbar-nav .nav-link").forEach(link => {
-        link.addEventListener("click", function (event) {
-            event.stopPropagation(); // Prevent interference from other event listeners
-            event.preventDefault(); // Prevent unwanted default behavior
-
-            let target = this.getAttribute("href");
-            if (target && target !== "#") {
-                window.location.href = target; // Force navigation
+    // Setup recharge now button for logged-in users
+    const rechargeNowBtn = document.querySelector('#rechargeModal1 .btn-primary');
+    if (rechargeNowBtn) {
+        rechargeNowBtn.addEventListener('click', function() {
+            if (selectedPlan) {
+                // Store selected plan details
+                localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+                
+                // If user is logged in, we already have their details
+                const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
+                
+                if (userDetails && userDetails.mobile) {
+                    // Store mobile number for payment page
+                    localStorage.setItem('mobileNumber', userDetails.mobile);
+                }
+                
+                // Redirect to payment page
+                window.location.href = "payment.html";
             }
         });
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Select the Sign In link and Profile Icon
-    const signInLink = document.querySelector(".nav-link.text-danger"); // "Sign In" link
-    const profileIcon = document.querySelector(".profile-icon"); // Profile Icon
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-    if (isLoggedIn) {
-        // User is logged in: Show Profile Icon, Hide Sign In Link
-        if (signInLink) signInLink.style.display = "none";
-        if (profileIcon) profileIcon.style.display = "inline-block";
-    } else {
-        // User is logged out: Show Sign In Link, Hide Profile Icon
-        if (signInLink) signInLink.style.display = "inline-block";
-        if (profileIcon) profileIcon.style.display = "none";
     }
 
-    document.getElementById('proceedBtn').addEventListener('click', function() {
-        const mobileNumberInput = document.getElementById('mobileNumber').value;
-        const mobileNumber = mobileNumberInput ? mobileNumberInput : '+91 9876543210'; // Default if empty
-    
-        // Store mobile number
-        localStorage.setItem('mobileNumber', mobileNumber);
-    
-        // Store selected plan details
-        if (selectedPlan) {
-            localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+    // Fetch plans by category
+    async function fetchPlansByCategory(category) {
+        try {
+            // Display loading indicator
+            const container = document.getElementById('plansContainer');
+            container.innerHTML = `
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading plans...</p>
+                </div>
+            `;
+            
+            const url =  `http://localhost:8083/plans/category?category=${encodeURIComponent(category)}`
+            
+            console.log('Fetching plans from:', url);
+            
+            const response = await fetch(url);
+            
+            // Debug the response
+            console.log('API response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`Failed to fetch plans: ${response.status} ${response.statusText}`);
+            }
+            
+            const plans = await response.json();
+            console.log('Fetched plans:', plans);
+            
+            if (!plans || plans.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            No plans available in this category.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Display the fetched plans
+            displayPlans(plans);
+        } catch (error) {
+            console.error('Error fetching plans:', error);
+            
+            // Display error message in plans container
+            const container = document.getElementById('plansContainer');
+            container.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        Failed to load plans. Please try again later. (Error: ${error.message})
+                    </div>
+                </div>
+            `;
         }
-    });
-    
+    }
+
+    // Display plans directly without categorization (since we're fetching by category)
+    function displayPlans(plans) {
+        const container = document.getElementById('plansContainer');
+        container.innerHTML = '';
+        
+        // Display each plan
+        plans.forEach((plan, index) => {
+            const card = document.createElement('div');
+            card.className = 'col-12 col-md-6 col-lg-4 mb-4';
+            
+            // Determine if plan has multiple OTT services
+            const ottServices = plan.ottBenefits || [];
+            const hasMultipleOtt = ottServices.length > 1;
+            const ottBadge = hasMultipleOtt ? `+${ottServices.length - 1}` : '';
+            
+            // Get primary OTT service for badge display
+            let badgeText = '';
+            let primaryOttImage = '';
+            let primaryOttName = '';
+            let ottPlanInfo = '';
+            
+            if (ottServices.length > 0) {
+                const primaryOtt = ottServices[0].ottPlan.ottProvider;
+                primaryOttName = primaryOtt.ottName;
+                badgeText = `Premium Pack - Includes ${primaryOttName}`;
+                primaryOttImage = getOttIconPath(primaryOttName);
+                ottPlanInfo = `${ottServices[0].ottPlan.ottPlanName} - ${ottServices[0].ottPlan.ottValidityMonths} month(s)`;
+            }
+            
+            card.innerHTML = `
+                <div class="card shadow-sm p-4 plan-card">
+                    ${badgeText ? `<div class="plan-badge">${badgeText}</div>` : ''}
+                    <div>
+                        <div class="card-header-content d-flex justify-content-between align-items-center mb-3">
+                            <div class="price">
+                                <span class="fs-5 me-1">₹</span>
+                                <span class="fs-2 fw-bold">${plan.planPrice}</span>
+                            </div>
+                            <div class="data-validity-info">
+                                <div class="info-block">
+                                    <span class="info-value">${plan.dataLimit}</span>
+                                    <small class="info-label">data</small>
+                                </div>
+                                <div class="info-block">
+                                    <span class="info-value">${plan.validityDays}</span>
+                                    <small class="info-label">days</small>
+                                </div>
+                            </div>
+                            <div class="ms-auto">
+                                <button class="buy-button" data-plan-index="${index}">buy</button>
+                            </div>
+                        </div>
+                        <hr class="card-divider">
+                        <div class="mt-3">
+                            ${ottServices.length > 0 ? 
+                                `<div class="ott-service-info">
+                                    <div class="ott-icons-container position-relative">
+                                        <img src="${primaryOttImage}" width="36" height="36" alt="${primaryOttName}" class="img-fluid rounded">
+                                        ${ottBadge ? `<span class="ott-badge" data-plan-index="${index}">${ottBadge}</span>` : ''}
+                                    </div>
+                                    <div class="ott-plan-details">
+                                        ${ottPlanInfo}
+                                    </div>
+                                </div>` 
+                            : ''}
+                            <div class="call-sms-info mt-2">
+                                ${plan.callLimit} + ${plan.smsLimit}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(card);
+        });
+        
+        // Attach event listeners to buy buttons
+        document.querySelectorAll('.buy-button').forEach((button, index) => {
+            button.addEventListener('click', function() {
+                handleBuyClick(plans[index]);
+            });
+        });
+        
+        // Attach event listeners to OTT badges
+        document.querySelectorAll('.ott-badge').forEach((badge, index) => {
+            badge.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const planIndex = this.getAttribute('data-plan-index');
+                showOttDetailsModal(plans[planIndex]);
+            });
+        });
+    }
+
+    // Handle buy button click
+    function handleBuyClick(plan) {
+        selectedPlan = plan;
+        showPlanDetails();
+        
+        if (isLoggedIn) {
+            // For logged-in users, show confirmation modal
+            rechargeModalLoggedIn.show();
+        } else {
+            // For non-logged-in users, show mobile number input modal
+            rechargeModal.show();
+        }
+    }
+
+    // Show OTT details modal
+    function showOttDetailsModal(plan) {
+        const modalContent = document.getElementById('ottDetailsContent');
+        const ottServices = plan.ottBenefits || [];
+        
+        let ottContent = '';
+        ottServices.forEach(benefit => {
+            const ott = benefit.ottPlan;
+            const ottProvider = ott.ottProvider;
+            
+            ottContent += `
+                <div class="d-flex align-items-center mb-3">
+                    <img src="${getOttIconPath(ottProvider.ottName)}" width="40" height="40" alt="${ottProvider.ottName}" class="me-3">
+                    <div>
+                        <h5 class="mb-1">${ottProvider.ottName}</h5>
+                        <p class="mb-0 text-muted">${ott.ottPlanName} Plan</p>
+                        <p class="mb-0 small">Duration: ${ott.ottValidityMonths} month(s)</p>
+                    </div>
+                </div>
+            `;
+        });
+        
+        modalContent.innerHTML = ottContent || '<p>No OTT services available with this plan.</p>';
+        ottDetailsModal.show();
+    }
+
+    // Get OTT icon path based on name
+    function getOttIconPath(ottName) {
+        const ottIcons = {
+            'Netflix': 'Netflix.svg',
+            'Prime Video': 'prime.svg',
+            'Jio Hotstar': 'Hotstar (1).svg',
+            'Sony LIV': 'sonyliv.svg',
+            'ZEE5': 'zee5.svg',
+            'Voot': 'voot.svg'
+        };
+        
+        return ottIcons[ottName] || 'placeholder.svg';
+    }
+
+    // Show selected plan details in recharge modal
+    function showPlanDetails() {
+        if (!selectedPlan) return;
+        
+        const ottServices = selectedPlan.ottBenefits || [];
+        let ottContent = '';
+        
+        if (ottServices.length > 0) {
+            const primaryOtt = ottServices[0].ottPlan.ottProvider;
+            const benefitImg = getOttIconPath(primaryOtt.ottName);
+            
+            ottContent = `
+                <div class="d-flex align-items-center mt-2 mb-0">
+                    <img src="${benefitImg}" width="40" height="40" alt="${primaryOtt.ottName}" class="me-2">
+                    <div>
+                        <p class="text-success fs-6 mb-0">${ottServices.length > 1 ? 'Multiple OTT Subscriptions' : primaryOtt.ottName}</p>
+                        ${ottServices.length > 1 ? `<small class="text-muted">(${ottServices.length} services included)</small>` : 
+                        `<small class="text-muted">${ottServices[0].ottPlan.ottPlanName} - ${ottServices[0].ottPlan.ottValidityMonths} month(s)</small>`}
+                    </div>
+                </div>
+            `;
+        }
+        
+        document.querySelectorAll('#selectedPlanInfo').forEach(element => {
+            element.innerHTML = `
+                <div class="fw-bold fs-5 mb-2">Selected Plan</div>
+                <div class="small d-flex flex-column gap-2">
+                    <p class="mb-1 fs-6 fw-bold">
+                        <i class="bi bi-currency-rupee text-secondary"></i> ${selectedPlan.planPrice}
+                    </p>
+                    <p class="mb-1 fs-6">
+                        <i class="bi bi-calendar-check text-secondary"></i> ${selectedPlan.validityDays} Days
+                    </p>
+                    <p class="mb-1 fs-6">
+                        <i class="bi bi-wifi text-secondary"></i> Data: ${selectedPlan.dataLimit}
+                    </p>
+                    <p class="mb-1 fs-6">
+                        <i class="bi bi-telephone text-secondary"></i> Calls: ${selectedPlan.callLimit}
+                    </p>
+                    <p class="mb-1 fs-6">
+                        <i class="bi bi-chat-dots text-secondary"></i> SMS: ${selectedPlan.smsLimit}
+                    </p>
+                    ${ottContent}
+                </div>
+            `;
+        });
+    }
 });
 
+// Logout function
 function logout() {
-    localStorage.removeItem("isLoggedIn"); // Remove login status
-    window.location.href = "index.html"; // Redirect to login page
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userDetails");
+    localStorage.removeItem("currentUserDetails");
+    window.location.href = "index.html";
 }

@@ -83,7 +83,9 @@ public class TransactionService {
         return savedTransaction;
     }
 
-   
+    public Optional<Transaction> getLastTransactionByUserId(int userId) {
+        return transactionRepository.findTopByUserUserIdOrderByTransactionDateDesc(userId);
+    }
 }
 
 

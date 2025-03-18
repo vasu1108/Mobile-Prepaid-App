@@ -7,15 +7,50 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./css/login.css">
+    <style>
+        /* Custom alert styles */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 350px;
+            background-color: #d5edff;
+            color: #004085;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 9999;
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        
+        .custom-alert-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .custom-alert-body {
+            font-size: 0.95rem;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
 </head>
 <body>
     
 <!-- Navigation -->
-<nav  class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3" style="background-color: #424B54;">
+<nav class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3" style="background-color: #424B54;">
     <div class="container-xxl">
         <a class="navbar-brand" href="index.html">
             <img src="./assets/logo-transparent-png.png" height="40" alt="Logo"><br>
-            
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: white;">
             <span class="navbar-toggler-icon"></span>
@@ -26,195 +61,416 @@
                 <li class="nav-item"><a class="nav-link fw-medium" href="prepaid plans.html">Prepaid</a></li>
                 <li class="nav-item"><a class="nav-link fw-medium" href="support.html">Support</a></li>
                 <li class="nav-item"><a class="nav-link fw-medium" href="help.html">FAQ</a></li>
-                
             </ul>
-            <!-- <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link fw-medium text-danger" href="#">Sign In</a></li>
-                
-            </ul> -->
         </div>
     </div>
 </nav>
 
+<main class="container-fluid p-0">
+    <div class="row g-0 login-container bg-danger text-white">
+        <div class="col-12 col-md-6 d-flex align-items-center">
+            <img src="./assets/bundle-iot-isometric-icon_9206-15995.jpg" 
+                 alt="Mobi-comm" 
+                 class="login-image">
+        </div>
 
-    <main class="container-fluid p-0">
-        <div class="row g-0 login-container bg-danger text-white">
-            <div class="col-12 col-md-6 d-flex align-items-center">
-                <img src="./assets/bundle-iot-isometric-icon_9206-15995.jpg" 
-                     alt="Mobi-comm" 
-                     class="login-image">
-            </div>
-
-            <div class="col-12 col-md-6">
-                <div class="login-form d-flex flex-column justify-content-center h-100 px-5 py-5">
-                    <form id="mobileView" onsubmit="handleSubmit(event)" class="max-width-420">
-                        <h1 class="fw-bold fs-1 mb-2">Login to Mobi-comm</h1>
-                        <h2 class="fs-4 mb-4">to manage your prepaid<br>account and track usage</h2>
-                        <div class="mt-4 mb-4">
-                            <input type="tel" 
-                                   id="mobileNumber"
-                                   class="form-control mobile-input"
-                                   placeholder="enter your mobile number"
-                                   pattern="[0-9]{10}"
-                                   maxlength="10"
-                                   oninput="validateMobile(this)">
+        <div class="col-12 col-md-6">
+            <div class="login-form d-flex flex-column justify-content-center h-100 px-5 py-5">
+                <form id="mobileView" class="max-width-420">
+                    <h1 class="fw-bold fs-1 mb-2">Login to Mobi-comm</h1>
+                    <h2 class="fs-4 mb-4">to manage your prepaid<br>account and track usage</h2>
+                    <div class="mt-4 mb-4">
+                        <input type="tel" 
+                               id="mobileNumber"
+                               class="form-control mobile-input"
+                               placeholder="enter your mobile number"
+                               pattern="[0-9]{10}"
+                               maxlength="10"
+                               oninput="validateMobile(this)">
+                        <div id="mobileError" class="text-warning mt-2 d-none">
+                            Mobile number not found or account inactive
                         </div>
-                        <button type="submit" id="submitButton" class="custom-button text-black" disabled>send OTP</button>
-                    </form>
+                        <div id="serverError" class="text-warning mt-2 d-none">
+                            Server error. Please try again later.
+                        </div>
+                    </div>
+                    <button type="button" id="submitButton" class="custom-button text-black" disabled onclick="handleMobileSubmit()">
+                        <span id="submitText">send OTP</span>
+                        <div id="submitSpinner" class="spinner-border spinner-border-sm text-dark d-none" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </form>
 
-                    <div id="otpView" class="max-width-420">
-                        <h1 class="fw-bold fs-1 mb-2">Login to Mobi-comm</h1>
-                        <h2 class="fs-4 mb-4">easy to handle account experience</h2>
-                        <div class="mt-4">
-                            <label class="text-white">enter a valid otp</label>
-                            <div class="otp-container">
-                                <input type="text" class="otp-input text-center" maxlength="1" data-index="0" oninput="handleOtpInput(this)">
-                                <input type="text" class="otp-input text-center" maxlength="1" data-index="1" oninput="handleOtpInput(this)">
-                                <input type="text" class="otp-input text-center" maxlength="1" data-index="2" oninput="handleOtpInput(this)">
-                                <input type="text" class="otp-input text-center" maxlength="1" data-index="3" oninput="handleOtpInput(this)">
+                <div id="otpView" class="max-width-420" style="display: none;">
+                    <h1 class="fw-bold fs-1 mb-2">Login to Mobi-comm</h1>
+                    <h2 class="fs-4 mb-4">easy to handle account experience</h2>
+                    <div class="mt-4">
+                        <label class="text-white">enter a valid otp</label>
+                        <div class="otp-container">
+                            <input type="text" class="otp-input text-center" maxlength="1" data-index="0" oninput="handleOtpInput(this)">
+                            <input type="text" class="otp-input text-center" maxlength="1" data-index="1" oninput="handleOtpInput(this)">
+                            <input type="text" class="otp-input text-center" maxlength="1" data-index="2" oninput="handleOtpInput(this)">
+                            <input type="text" class="otp-input text-center" maxlength="1" data-index="3" oninput="handleOtpInput(this)">
+                        </div>
+                    </div>
+                    <p class="text-white mb-4" id="otpMessage"></p>
+                    <div id="otpError" class="text-warning mb-3 d-none">
+                        Invalid OTP. Please try again.
+                    </div>
+                    <div class="d-flex flex-column gap-3">
+                        <button type="button" id="verifyButton" class="verify-button" disabled onclick="handleVerifyOTP()">
+                            <span id="verifyText">verify</span>
+                            <div id="verifySpinner" class="spinner-border spinner-border-sm text-dark d-none" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
-                        </div>
-                        <p class="text-white mb-4" id="otpMessage"></p>
-                        <div class="d-flex flex-column gap-3">
-                            <button type="button" id="verifyButton" class="verify-button" disabled onclick="handleLogin()">verify</button>
-                            <span id="resendTimer" class="resend-text text-white"></span>
-                        </div>
+                        </button>
+                        <span id="resendTimer" class="resend-text text-white"></span>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <div class="container-fluid d-flex flex-column bg-dark">
-      <footer class="py-5 px-md-5">
-          <div class="row justify-content-center g-4">
-              <div class="col-12 col-md-3">
-                  <div class="footer-section">
-                      <div style="width: 60px; height: 60px;">
-                          <img src="./assets/logo-transparent-png.png" alt="Mobi Recharge logo" class="img-fluid">
-                      </div>
-                      <h2 class="footer-title mt-3">Mobi-Comm</h2>
-                      <p class="company-description">
-                          Mobi-Comm provides seamless prepaid mobile recharge services with secure transactions.
-                      </p>
-                      <div class="d-flex gap-2 mt-4">
+<div class="container-fluid d-flex flex-column bg-dark">
+    <footer class="py-5 px-md-5">
+        <div class="row justify-content-center g-4">
+            <div class="col-12 col-md-3">
+                <div class="footer-section">
+                    <div style="width: 60px; height: 60px;">
+                        <img src="./assets/logo-transparent-png.png" alt="Mobi Recharge logo" class="img-fluid">
+                    </div>
+                    <h2 class="footer-title mt-3">Mobi-Comm</h2>
+                    <p class="company-description">
+                        Mobi-Comm provides seamless prepaid mobile recharge services with secure transactions.
+                    </p>
+                    <div class="d-flex gap-2 mt-4">
                         <img src="./assets/fb.png" class="social-icon" alt="Facebook">
                         <img src="./assets/x.png" class="social-icon" alt="Twitter">
                         <img src="./assets/insta.png" class="social-icon" alt="Instagram">
                         <img src="./assets/in.png" class="social-icon" alt="LinkedIn">
-                      </div>
-                  </div>
-              </div>
-              <div class="col-12 col-md-2">
-                  <div class="footer-section">
-                      <h2 class="footer-title">About Us</h2>
-                      <a href="#" class="footer-link">Company Info</a>
-                      <a href="#" class="footer-link">Investor Relations</a>
-                      <a href="#" class="footer-link">News & Media</a>
-                      <a href="#" class="footer-link">Careers</a>
-                  </div>
-              </div>
-              <div class="col-12 col-md-2">
-                  <div class="footer-section">
-                      <h2 class="footer-title">Services</h2>
-                      <a href="#" class="footer-link">Prepaid Plans</a>
-                      <a href="#" class="footer-link">5G plans</a>
-                      <a href="#" class="footer-link">Data Plans</a>
-                      <a href="#" class="footer-link">Recharge for Others</a>
-                  </div>
-              </div>
-              <div class="col-12 col-md-2">
-                  <div class="footer-section">
-                      <h2 class="footer-title">Support</h2>
-                      <a href="#" class="footer-link">FAQs</a>
-                      <a href="#" class="footer-link">Contact Us</a>
-                      <a href="#" class="footer-link">Refund Policy</a>
-                      <a href="#" class="footer-link">Recharge History</a>
-                  </div>
-              </div>
-              <div class="col-12 col-md-2">
-                  <div class="footer-section">
-                      <h2 class="footer-title">Legal</h2>
-                      <a href="#" class="footer-link">Privacy Policy</a>
-                      <a href="#" class="footer-link">Terms of Service</a>
-                      <a href="#" class="footer-link">Security Awareness</a>
-                  </div>
-              </div>
-          </div>
-      </footer>
-  </div>
-  
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">About Us</h2>
+                    <a href="#" class="footer-link">Company Info</a>
+                    <a href="#" class="footer-link">Investor Relations</a>
+                    <a href="#" class="footer-link">News & Media</a>
+                    <a href="#" class="footer-link">Careers</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">Services</h2>
+                    <a href="#" class="footer-link">Prepaid Plans</a>
+                    <a href="#" class="footer-link">5G plans</a>
+                    <a href="#" class="footer-link">Data Plans</a>
+                    <a href="#" class="footer-link">Recharge for Others</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">Support</h2>
+                    <a href="#" class="footer-link">FAQs</a>
+                    <a href="#" class="footer-link">Contact Us</a>
+                    <a href="#" class="footer-link">Refund Policy</a>
+                    <a href="#" class="footer-link">Recharge History</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">Legal</h2>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Security Awareness</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let resendInterval, remainingTime = 37;
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let resendInterval, remainingTime = 37;
+    let currentUserEmail = '';
+    let generatedOtp = '';
+    let currentUserDetails = null;
 
-        const validateMobile = input => {
-            input.value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
-            document.getElementById('submitButton').disabled = input.value.length !== 10;
-        };
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if already logged in and redirect if needed
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if (isLoggedIn) {
+            window.location.href = "Account.html";
+        }
+    });
 
-        function handleOtpInput(input) {
-            const value = input.value;
-            const index = parseInt(input.dataset.index);
+    // Show custom alert function
+    function showCustomAlert(title, message, duration = 5000) {
+        // Create alert element
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'custom-alert';
+        
+        const alertContent = `
+            <div class="custom-alert-title">${title}</div>
+            <div class="custom-alert-body">${message}</div>
+        `;
+        
+        alertDiv.innerHTML = alertContent;
+        document.body.appendChild(alertDiv);
+        
+        // Remove alert after duration
+        setTimeout(() => {
+            alertDiv.style.animation = 'fadeOut 0.5s ease-out forwards';
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 500);
+        }, duration);
+    }
+
+    const validateMobile = input => {
+        input.value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+        document.getElementById('submitButton').disabled = input.value.length !== 10;
+        
+        // Hide error messages when user starts typing again
+        document.getElementById('mobileError').classList.add('d-none');
+        document.getElementById('serverError').classList.add('d-none');
+    };
+
+    function handleOtpInput(input) {
+        const value = input.value;
+        const index = parseInt(input.dataset.index);
+        
+        // Allow only numbers
+        if (!/^\d*$/.test(value)) {
+            input.value = '';
+            return;
+        }
+
+        // Auto-focus next input
+        if (value && index < 3) {
+            const nextInput = document.querySelector(`[data-index="${index + 1}"]`);
+            nextInput?.focus();
+        }
+
+        // Enable/disable verify button
+        const allInputs = document.querySelectorAll('.otp-input');
+        const otp = Array.from(allInputs).map(input => input.value).join('');
+        document.getElementById('verifyButton').disabled = otp.length !== 4;
+        
+        // Hide error message when user starts typing a new OTP
+        document.getElementById('otpError').classList.add('d-none');
+    }
+
+    function updateResendTimer() {
+        const resendTimer = document.getElementById('resendTimer');
+        if (remainingTime > 0) {
+            resendTimer.textContent = `resend otp in ${remainingTime} sec`;
+            remainingTime--;
+        } else {
+            clearInterval(resendInterval);
+            resendTimer.textContent = 'resend otp';
+            resendTimer.style.cursor = 'pointer';
+            resendTimer.onclick = handleResendOTP;
+        }
+    }
+
+    function handleResendOTP() {
+        // Show loading in resend text
+        const resendTimer = document.getElementById('resendTimer');
+        resendTimer.textContent = 'sending...';
+        resendTimer.style.cursor = 'default';
+        
+        // Generate new OTP
+        generatedOtp = generateRandomOTP();
+        
+        // Show OTP in alert instead of sending email
+        if (currentUserDetails) {
+            showCustomAlert('OTP Sent', `Your OTP is: ${generatedOtp} (for ${currentUserDetails.name})`);
             
-            // Allow only numbers
-            if (!/^\d*$/.test(value)) {
-                input.value = '';
-                return;
-            }
-
-            // Auto-focus next input
-            if (value && index < 3) {
-                const nextInput = document.querySelector(`[data-index="${index + 1}"]`);
-                nextInput?.focus();
-            }
-
-            // Enable/disable verify button
-            const allInputs = document.querySelectorAll('.otp-input');
-            const otp = Array.from(allInputs).map(input => input.value).join('');
-            document.getElementById('verifyButton').disabled = otp.length !== 4;
-        }
-
-        function updateResendTimer() {
-            const resendTimer = document.getElementById('resendTimer');
-            if (remainingTime > 0) {
-                resendTimer.textContent = `resend otp in ${remainingTime} sec`;
-                remainingTime--;
-            } else {
-                clearInterval(resendInterval);
-                resendTimer.textContent = 'resend otp';
-                resendTimer.style.cursor = 'pointer';
-                resendTimer.onclick = handleResendOTP;
-            }
-        }
-
-        function handleResendOTP() {
             remainingTime = 37;
             updateResendTimer();
             resendInterval = setInterval(updateResendTimer, 1000);
+            
             // Clear OTP inputs
             document.querySelectorAll('.otp-input').forEach(input => input.value = '');
             document.getElementById('verifyButton').disabled = true;
+        } else {
+            resendTimer.textContent = 'Failed to send OTP. Try again.';
+            resendTimer.style.cursor = 'pointer';
+            resendTimer.onclick = handleResendOTP;
         }
+    }
 
-        function handleSubmit(event) {
-            event.preventDefault();
-            const mobileNumber = document.getElementById('mobileNumber').value;
+    function generateRandomOTP() {
+        return Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    async function handleMobileSubmit() {
+        const mobileNumber = document.getElementById('mobileNumber').value;
+        
+        // Show loading
+        document.getElementById('submitText').classList.add('d-none');
+        document.getElementById('submitSpinner').classList.remove('d-none');
+        document.getElementById('submitButton').disabled = true;
+        
+        try {
+            // Clear previous error messages
+            document.getElementById('mobileError').classList.add('d-none');
+            document.getElementById('serverError').classList.add('d-none');
+            
+            // Fetch user details from API with specific mobile endpoint
+            const response = await fetch(`http://localhost:8083/users/mobile/${mobileNumber}`);
+            
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // User not found
+                    document.getElementById('mobileError').classList.remove('d-none');
+                    document.getElementById('submitText').classList.remove('d-none');
+                    document.getElementById('submitSpinner').classList.add('d-none');
+                    document.getElementById('submitButton').disabled = false;
+                    return;
+                } else {
+                    // Other server errors
+                    throw new Error('Server error: ' + response.status);
+                }
+            }
+            
+            const userData = await response.json();
+            
+            // Check if user is active
+            if (userData.userStatus !== 'Active') {
+                document.getElementById('mobileError').textContent = 'Account is inactive. Please contact support.';
+                document.getElementById('mobileError').classList.remove('d-none');
+                document.getElementById('submitText').classList.remove('d-none');
+                document.getElementById('submitSpinner').classList.add('d-none');
+                document.getElementById('submitButton').disabled = false;
+                return;
+            }
+            
+            // Store user details
+            currentUserDetails = userData;
+            currentUserEmail = userData.userEmail;
+            
+            // Store user details in local storage
+            localStorage.setItem("currentUserDetails", JSON.stringify(userData));
+            const storedUser = JSON.parse(localStorage.getItem("currentUserDetails"));
+            console.log(storedUser);
+
+
+            // Generate 4-digit OTP
+            generatedOtp = generateRandomOTP();
+            
+            // Show OTP in custom alert instead of sending email
+            showCustomAlert('OTP Sent', `Your OTP is: ${generatedOtp} (for ${userData.name})`);
+            
+            // Hide mobile view and show OTP view
             document.getElementById('mobileView').style.display = 'none';
             document.getElementById('otpView').style.display = 'block';
-            document.getElementById('otpMessage').textContent = `OTP has been sent to your number XXXXXX${mobileNumber.slice(-4)}`;
-            handleResendOTP();
+            
+            // Show masked mobile number in message
+            document.getElementById('otpMessage').textContent = 
+                `OTP has been sent to email associated with XXXXXX${mobileNumber.slice(-4)}`;
+            
+            // Start resend timer
+            remainingTime = 37;
+            updateResendTimer();
+            resendInterval = setInterval(updateResendTimer, 1000);
+            
             // Focus first OTP input
             document.querySelector('.otp-input').focus();
+            
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            
+            // Show server error
+            document.getElementById('serverError').classList.remove('d-none');
+            document.getElementById('submitText').classList.remove('d-none');
+            document.getElementById('submitSpinner').classList.add('d-none');
+            document.getElementById('submitButton').disabled = false;
+            
+            // If API is not working, can simulate success for demo purpose
+            // Uncomment the following line if you want to simulate login when API is down
+            // simulateSuccessfulLogin(mobileNumber);
         }
-        function handleLogin() {
-         event.preventDefault();
+    }
 
-          // Assuming login is successful after OTP verification or form submission
-          localStorage.setItem("isLoggedIn", "true");
-          window.location.href = "Account.html"; // Redirect to Home or any other page
-        }
-    </script>
+    // Function to simulate successful login when the API is not available
+    function simulateSuccessfulLogin(mobileNumber) {
+        console.log('API not available, simulating login flow');
+        
+        // Create a mock user
+        currentUserDetails = {
+            userId: "demo123",
+            name: "Demo User",
+            userEmail: "demo@example.com",
+            mobileNumber: mobileNumber,
+            userStatus: "Active"
+        };
+        
+        // Generate OTP
+        generatedOtp = generateRandomOTP();
+        
+        // Show OTP in custom alert
+        showCustomAlert('OTP Sent', `Your OTP is: ${generatedOtp} (for Demo User)`);
+        
+        // Hide mobile view and show OTP view
+        document.getElementById('mobileView').style.display = 'none';
+        document.getElementById('otpView').style.display = 'block';
+        
+        // Show masked mobile number in message
+        document.getElementById('otpMessage').textContent = 
+            `OTP has been sent to email associated with XXXXXX${mobileNumber.slice(-4)}`;
+        
+        // Start resend timer
+        remainingTime = 37;
+        updateResendTimer();
+        resendInterval = setInterval(updateResendTimer, 1000);
+        
+        // Focus first OTP input
+        document.querySelector('.otp-input').focus();
+    }
+
+    function handleVerifyOTP() {
+        // Get entered OTP
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const enteredOtp = Array.from(otpInputs).map(input => input.value).join('');
+        
+        // Show loading
+        document.getElementById('verifyText').classList.add('d-none');
+        document.getElementById('verifySpinner').classList.remove('d-none');
+        document.getElementById('verifyButton').disabled = true;
+        
+        // Simulate verification process
+        setTimeout(() => {
+            if (enteredOtp === generatedOtp) {
+                // Save login status and user info to localStorage
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userDetails", JSON.stringify({
+                    userId: currentUserDetails.userId,
+                    name: currentUserDetails.name,
+                    email: currentUserDetails.userEmail,
+                    mobile: currentUserDetails.mobileNumber
+                }));
+                
+                showCustomAlert('Success', 'Login successful! Redirecting to your account.');
+                
+                // Redirect to account page on successful login
+                setTimeout(() => {
+                    window.location.href = "Account.html";
+                }, 1500);
+            } else {
+                // Show error for incorrect OTP
+                document.getElementById('otpError').classList.remove('d-none');
+                document.getElementById('verifyText').classList.remove('d-none');
+                document.getElementById('verifySpinner').classList.add('d-none');
+                document.getElementById('verifyButton').disabled = false;
+            }
+        }, 1500);
+    }
+</script>
 </body>
 </html>

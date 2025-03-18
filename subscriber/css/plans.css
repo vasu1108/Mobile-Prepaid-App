@@ -43,7 +43,7 @@
         #category {
             margin-top: 100px;
         }
-        .highlight-text::after {
+        /* .highlight-text::after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -88,7 +88,7 @@
         .buy-button:hover {
             background-color: #d61f2d;
             color: white;
-        }
+        } */
 
         .section-container {
             background-color: #FEFAF6;
@@ -195,3 +195,117 @@
         background-color: #b6b7b7 !important; /* Change background color on hover */
         color: white !important; /* Change text color on hover */
     }
+
+  /* Plan card styles */
+.plan-card {
+    position: relative;
+    border-radius: 16px;
+    background-color: rgb(243, 222, 222);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.plan-badge {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background-color: #191a19;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.price-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 5px 0;
+}
+
+.price {
+    display: flex;
+    align-items: baseline;
+}
+
+.data-validity-info {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+}
+
+.info-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-value {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.buy-button {
+    background-color: #E60000;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.buy-button:hover {
+    background-color: #ac0707;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ott-service-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ott-plan-details {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.card-divider {
+    margin: 15px 0;
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.call-sms-info {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* Added styles for active tab */
+.nav-tabs .nav-link.active {
+    color: #E60000;
+    font-weight: bold;
+    border-color: #E60000 #E60000 #fff;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    border-color: transparent;
+    color: #E60000;
+}

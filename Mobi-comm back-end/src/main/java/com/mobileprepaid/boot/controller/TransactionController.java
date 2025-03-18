@@ -33,6 +33,11 @@ public class TransactionController {
         return ResponseEntity.ok(savedTransaction);
     }
 
-
+    @GetMapping("/last/{userId}")
+    public ResponseEntity<Transaction> getLastTransaction(@PathVariable int userId) {
+        return transactionService.getLastTransactionByUserId(userId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
    
 }

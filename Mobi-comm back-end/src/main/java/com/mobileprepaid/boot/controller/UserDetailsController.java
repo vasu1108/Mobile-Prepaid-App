@@ -2,6 +2,8 @@ package com.mobileprepaid.boot.controller;
 
 import com.mobileprepaid.boot.model.UserDetail;
 import com.mobileprepaid.boot.service.UserDetailService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,4 +44,18 @@ public class UserDetailsController {
         userDetailsService.deleteUserDetails(id);
         return ResponseEntity.ok("User details deleted successfully");
     }
+    
+    @GetMapping("/fetch/{userId}") 
+    public ResponseEntity<UserDetail> getUserDetailByUserId(@PathVariable int userId) {
+        return userDetailsService.getUserDetailByUserId(userId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<UserDetail> updateUserDetailsByUserId(@PathVariable int userId, @RequestBody UserDetail updatedUserDetail) {
+        UserDetail updatedDetail = userDetailsService.updateUserDetailsByUserId(userId, updatedUserDetail);
+        return ResponseEntity.ok(updatedDetail);
+    }
+    
 }

@@ -31,4 +31,10 @@ public class RechargeController {
     public ResponseEntity<Recharge> createRecharge(@RequestBody Recharge recharge) {
         return ResponseEntity.ok(rechargeService.saveRecharge(recharge));
     }
+    
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Recharge>> getRechargesByUserId(@PathVariable int userId) {
+        List<Recharge> recharges = rechargeService.getRechargesByUserId(userId);
+        return recharges.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(recharges);
+    }
 }

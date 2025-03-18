@@ -25,4 +25,8 @@ public class RechargeService {
     public Recharge saveRecharge(Recharge recharge) {
         return rechargeRepository.save(recharge);
     }
+    
+    public List<Recharge> getRechargesByUserId(int userId) {
+        return rechargeRepository.findByUserUserId(userId);
+    }
 }
