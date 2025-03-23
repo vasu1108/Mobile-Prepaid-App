@@ -537,3 +537,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+function checkUserAndRedirect() {
+    const currentUser = sessionStorage.getItem('currentUser');
+    
+    if (!currentUser) {
+      // No user found in sessionStorage, redirect to login page
+      window.location.href = 'login.html';
+    }
+  }
+  
+  // Call this function when your page loads
+  document.addEventListener('DOMContentLoaded', checkUserAndRedirect);

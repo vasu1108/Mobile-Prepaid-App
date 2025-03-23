@@ -6,16 +6,16 @@
     <title>My account</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/Account.css">
 </head>
 <body>
     
 <!-- Navigation -->
-<nav  class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3" style="background-color: #424B54;">
+<nav class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3" style="background-color: #424B54;">
     <div class="container-xxl">
         <a class="navbar-brand" href="index.html">
             <img src="./assets/logo-transparent-png.png" height="40" alt="Logo"><br>
-            
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: white;">
             <span class="navbar-toggler-icon"></span>
@@ -38,58 +38,120 @@
                         <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
                     </ul>
                 </div></li>
-
             </ul>
         </div>
     </div>
 </nav>
 
-    <div class="container py-4" style="margin-top: 85px;">
-        <!-- User Info -->
-        <div class="d-flex align-items-center mb-4">
-            <div class="bg-warning d-flex justify-content-center align-items-center rounded-circle me-3" style="width: 50px; height: 50px; border-radius: 50%;">S</div>
-            <div>
-                <h5 class="mb-0">Shreenivasan</h5>
-                <small class="text-muted">9876543210</small>
-            </div>
+<div class="container py-4" style="margin-top: 85px;">
+    <!-- User Info -->
+    <div class="d-flex align-items-center mb-4">
+        <div id="userInitial" class="user-avatar me-3">V</div>
+        <div>
+            <h5 id="userName" class="mb-0">Loading...</h5>
+            <small id="userMobile" class="text-muted">...</small>
         </div>
+    </div>
 
-        
-
-        <!-- Data Usage Card -->
-        <div class="data-card" style="background-color: rgb(249, 229, 179);">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <h2 class="mb-0">1.60<small>GB</small></h2>
-                    <small class="text-muted">Data Left</small>
-                    <div class="mt-3">
-                        <h6>truly unlimited calls</h6>
-                        <small class="text-muted">Pack valid till 19 Mar, 2025</small>
+    <!-- Current Plan Card -->
+    <div class="current-plan-card mb-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h4 id="planName" class="card-title fw-bold mb-3">Loading plan details...</h4>
+                <div class="plan-validity mb-3">
+                    <span class="badge bg-success mb-2">Active</span>
+                    <p class="text-muted mb-0">Valid till <span id="expiryDate">...</span></p>
+                </div>
+                
+                <div class="plan-details">
+                    <div class="row g-3">
+                        <div class="col-6 col-md-4">
+                            <div class="plan-feature">
+                                <i class="bi bi-wifi text-primary"></i>
+                                <span id="dataLimit">...</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="plan-feature">
+                                <i class="bi bi-chat-dots text-warning"></i>
+                                <span id="smsLimit">...</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="plan-feature">
+                                <i class="bi bi-telephone text-success"></i>
+                                <span id="callLimit">...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="text-end">
-                    <a href="prepaid plans.html"><button class="action-button mb-2" style="background-color: #FF4B4B;">recharge now</button></a>
-                    <!-- <div><small class="text-primary">pack details</small></div> -->
+                
+                <div id="ottBenefits" class="ott-benefits mt-4">
+                    <!-- OTT benefits will be populated here -->
                 </div>
             </div>
-            <hr>
-            <div class="d-flex justify-content-between">
-                <div>
-                    <small class="text-muted">weekend data rollover</small>
-                    <div>3.51 GB</div>
-                </div>
-                <div>
-                    <small class="text-muted">binge all night</small>
-                    <div>From 12am - 6am</div>
+            
+            <div class="col-md-4">
+                <div class="price-section text-center text-md-end">
+                    <h3 class="price mb-2">₹<span id="planPrice">...</span></h3>
+                    <a href="prepaid plans.html" class="btn btn-primary recharge-btn">Recharge Now</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-<div class="container my-5">
-    <div class="row g-4">
-        <div class="col-md-6 ">
-            <div id="recharge" class="card shadow-sm rounded-4 p-4 text-dark" style="background-color: #C6C7C4;">
+    <!-- Data Usage Card -->
+    <div class="data-card mb-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h5 class="mb-3">Daily Data Usage</h5>
+                <div class="progress-container mb-3">
+                    <div class="progress">
+                        <div id="dataProgress" class="progress-bar bg-primary" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <small id="dataUsed">0 GB used</small>
+                        <small id="dataTotal">0 GB total</small>
+                    </div>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="data-highlight">
+                            <i class="bi bi-graph-up text-success"></i>
+                            <div>
+                                <h6 class="mb-0">SMS Balance</h6>
+                                <p id="smsBalance" class="mb-0">0 remaining</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="data-highlight">
+                            <i class="bi bi-telephone-fill text-primary"></i>
+                            <div>
+                                <h6 class="mb-0">Call Status</h6>
+                                <p id="callStatus" class="mb-0">Unlimited</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                <div class="data-circle">
+                    <div class="data-circle-inner">
+                        <h3 id="dataRemaining">...</h3>
+                        <p class="mb-0">Data Left</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="feature-box shadow-sm rounded-4 p-4 text-dark" style="background-color: #f0f2ff;">
                 <h2 class="fs-2 fw-bold mb-4">Recharge for others</h2>
                 <div class="input-group">
                     <input type="text" id="mobileNumber" class="form-control" placeholder="Mobile number" maxlength="10" oninput="validateMobile(this)">
@@ -102,8 +164,8 @@
             </div>
         </div>
        
-        <div class="col-md-6 ">
-          <div id="recharge" class="card shadow-sm rounded-4 p-4 text-dark"  style="background-color: #C6C7C4;">
+        <div class="col-md-6">
+          <div class="feature-box shadow-sm rounded-4 p-4 text-dark" style="background-color: #fff0f0;">
               <h2 class="fs-3 fw-bold">Setup Auto-recharge</h2>
                 <p class="fs-5">Hassle free automatic recharges</p>
                 <p class="fs-5">Always stay connected, enjoy digital services & exciting benefits.</p>
@@ -111,132 +173,335 @@
           </div>
       </div>
     </div>
-</div>
        
-
-        <!-- Feature Cards -->
-         <!-- Feature Cards -->
-<div class="row">
-    <div class="col-md-4">
-        <div class="card shadow-sm rounded-4 p-4 d-flex flex-row justify-content-between align-items-center">
-            <div>
-                <a href="Recharge history.html" class="feature-card text-decoration-none text-dark">
-                    <h6>Recharge History</h6>
-                    <small class="text-muted">View your recharge history</small>
-                </a>
+    <!-- Feature Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm rounded-4 p-4 d-flex flex-row justify-content-between align-items-center">
+                <div>
+                    <a href="Recharge history.html" class="text-decoration-none text-dark">
+                        <h6>Recharge History</h6>
+                        <small class="text-muted">View your recharge history</small>
+                    </a>
+                </div>
+                <img src="./assets/2983742.png" style="height: 80px; width: 80px;">
             </div>
-            <img src="./assets/2983742.png" style="height: 80px; width: 80px;">
         </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card shadow-sm rounded-4 p-4 d-flex flex-row justify-content-between align-items-center">
-            <div>
-                <a href="#" class="feature-card text-decoration-none text-dark">
-                    <h6>Active Packs & Services</h6>
-                    <small class="text-muted">Check your active pack details and benefits</small>
-                </a>
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm rounded-4 p-4 d-flex flex-row justify-content-between align-items-center">
+                <div>
+                    <a href="#" class="text-decoration-none text-dark">
+                        <h6>Active Packs & Services</h6>
+                        <small class="text-muted">Check your active pack details and benefits</small>
+                    </a>
+                </div>
+                <img src="./assets/7023030.png" style="height: 80px; width: 80px;">
             </div>
-            <img src="./assets/7023030.png" style="height: 80px; width: 80px;">
         </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card shadow-sm rounded-4 p-4 d-flex flex-row justify-content-between align-items-center">
-            <div>
-                <a href="support.html" class="feature-card text-decoration-none text-dark">
-                    <h6>Requests & Complaints</h6>
-                    <small class="text-muted">Track the status of your service requests</small>
-                </a>
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm rounded-4 p-4 d-flex flex-row justify-content-between align-items-center">
+                <div>
+                    <a href="support.html" class="text-decoration-none text-dark">
+                        <h6>Requests & Complaints</h6>
+                        <small class="text-muted">Track the status of your service requests</small>
+                    </a>
+                </div>
+                <img src="./assets/png-transparent-complaint-law-privacy-regulatory-compliance-education-not-for-profit-leaf-computer-computer-wallpaper-thumbnail.png" style="height: 80px; width: 80px;">
             </div>
-            <img src="./assets/png-transparent-complaint-law-privacy-regulatory-compliance-education-not-for-profit-leaf-computer-computer-wallpaper-thumbnail.png" style="height: 80px; width: 80px;">
         </div>
     </div>
 </div>
-    </div>
 
-
-    <div class="container-fluid d-flex flex-column bg-dark">
-        <footer class="py-5 px-md-5">
-            <div class="row justify-content-center g-4">
-                <div class="col-12 col-md-3">
-                    <div class="footer-section">
-                        <div style="width: 60px; height: 60px;">
-                            <img src="./assets/logo-transparent-png.png" alt="Mobi Recharge logo" class="img-fluid">
-                        </div>
-                        <h2 class="footer-title mt-3">Mobi-Comm</h2>
-                        <p class="company-description">
-                            Mobi-Comm provides seamless prepaid mobile recharge services with secure transactions.
-                        </p>
-                        <div class="d-flex gap-2 mt-4">
-                            <img src="./assets/fb.png" class="social-icon" alt="Facebook">
-                            <img src="./assets/x.png" class="social-icon" alt="Twitter">
-                            <img src="./assets/insta.png" class="social-icon" alt="Instagram">
-                            <img src="./assets/in.png" class="social-icon" alt="LinkedIn">
-                        </div>
+<div class="container-fluid d-flex flex-column bg-dark">
+    <footer class="py-5 px-md-5">
+        <div class="row justify-content-center g-4">
+            <div class="col-12 col-md-3">
+                <div class="footer-section">
+                    <div style="width: 60px; height: 60px;">
+                        <img src="./assets/logo-transparent-png.png" alt="Mobi Recharge logo" class="img-fluid">
                     </div>
-                </div>
-                <div class="col-12 col-md-2">
-                    <div class="footer-section">
-                        <h2 class="footer-title">About Us</h2>
-                        <a href="#" class="footer-link">Company Info</a>
-                        <a href="#" class="footer-link">Investor Relations</a>
-                        <a href="#" class="footer-link">News & Media</a>
-                        <a href="#" class="footer-link">Careers</a>
-                    </div>
-                </div>
-                <div class="col-12 col-md-2">
-                    <div class="footer-section">
-                        <h2 class="footer-title">Services</h2>
-                        <a href="#" class="footer-link">Prepaid Plans</a>
-                        <a href="#" class="footer-link">5G plans</a>
-                        <a href="#" class="footer-link">Data Plans</a>
-                        <a href="#" class="footer-link">Recharge for Others</a>
-                    </div>
-                </div>
-                <div class="col-12 col-md-2">
-                    <div class="footer-section">
-                        <h2 class="footer-title">Support</h2>
-                        <a href="#" class="footer-link">FAQs</a>
-                        <a href="#" class="footer-link">Contact Us</a>
-                        <a href="#" class="footer-link">Refund Policy</a>
-                        <a href="#" class="footer-link">Recharge History</a>
-                    </div>
-                </div>
-                <div class="col-12 col-md-2">
-                    <div class="footer-section">
-                        <h2 class="footer-title">Legal</h2>
-                        <a href="#" class="footer-link">Privacy Policy</a>
-                        <a href="#" class="footer-link">Terms of Service</a>
-                        <a href="#" class="footer-link">Security Awareness</a>
+                    <h2 class="footer-title mt-3">Mobi-Comm</h2>
+                    <p class="company-description">
+                        Mobi-Comm provides seamless prepaid mobile recharge services with secure transactions.
+                    </p>
+                    <div class="d-flex gap-2 mt-4">
+                        <img src="./assets/fb.png" class="social-icon" alt="Facebook">
+                        <img src="./assets/x.png" class="social-icon" alt="Twitter">
+                        <img src="./assets/insta.png" class="social-icon" alt="Instagram">
+                        <img src="./assets/in.png" class="social-icon" alt="LinkedIn">
                     </div>
                 </div>
             </div>
-        </footer>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">About Us</h2>
+                    <a href="#" class="footer-link">Company Info</a>
+                    <a href="#" class="footer-link">Investor Relations</a>
+                    <a href="#" class="footer-link">News & Media</a>
+                    <a href="#" class="footer-link">Careers</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">Services</h2>
+                    <a href="#" class="footer-link">Prepaid Plans</a>
+                    <a href="#" class="footer-link">5G plans</a>
+                    <a href="#" class="footer-link">Data Plans</a>
+                    <a href="#" class="footer-link">Recharge for Others</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">Support</h2>
+                    <a href="#" class="footer-link">FAQs</a>
+                    <a href="#" class="footer-link">Contact Us</a>
+                    <a href="#" class="footer-link">Refund Policy</a>
+                    <a href="#" class="footer-link">Recharge History</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="footer-section">
+                    <h2 class="footer-title">Legal</h2>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Security Awareness</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- Loading Spinner -->
+<div id="loadingSpinner" class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function logout() {
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchCurrentPlan();
+
+        // Function to fetch current plan data
+        async function fetchCurrentPlan() {
+            showLoading(true);
+
+            try {
+                // Get user from session storage
+                const currentUser = JSON.parse(localStorage.getItem('currentUserDetails'));
+                const userId = currentUser.userId;
+
+                const response = await fetch(`http://localhost:8083/current-plan/${userId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch plan data');
+                }
+                
+                const data = await response.json();
+                displayUserInfo(data.user);
+                displayPlanDetails(data.plan);
+                displayUsageData(data);
+                displayOTTBenefits(data.plan.ottBenefits);
+                
+            } catch (error) {
+                console.error('Error fetching plan data:', error);
+                // Show error message to user
+                alert('Failed to load plan data. Please try again later.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Display user information
+        function displayUserInfo(user) {
+            if (!user) return;
+            
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userMobile').textContent = user.mobileNumber;
+            
+            // Set user initials in avatar
+            const initials = user.name.charAt(0);
+            document.getElementById('userInitial').textContent = initials;
+        }
+
+        // Display plan details
+        function displayPlanDetails(plan) {
+            if (!plan) return;
+            
+            document.getElementById('planName').textContent = plan.planName;
+            document.getElementById('planPrice').textContent = plan.planPrice.toFixed(2);
+            document.getElementById('dataLimit').textContent = plan.dataLimit;
+            document.getElementById('smsLimit').textContent = plan.smsLimit;
+            document.getElementById('callLimit').textContent = plan.callLimit;
+        }
+
+        // Display usage data
+        function displayUsageData(data) {
+            if (!data) return;
+            
+            // Format expiry date
+            const expiryDate = new Date(data.planExpiryDate);
+            const formattedExpiryDate = expiryDate.toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+            document.getElementById('expiryDate').textContent = formattedExpiryDate;
+            
+            // Display SMS balance
+            const smsUsed = data.smsUsed || 0;
+            const smsRemaining = data.smsRemaining || 0;
+            document.getElementById('smsBalance').textContent = `${smsRemaining} remaining`;
+            
+            // Display call status
+            document.getElementById('callStatus').textContent = data.plan.callLimit;
+            
+            // Calculate daily data usage
+            const dailyLimitString = data.plan.dataLimit;
+            const dailyLimitMatch = dailyLimitString.match(/(\d+(\.\d+)?)GB\/day/i);
+            
+            if (dailyLimitMatch) {
+                const dailyLimitGB = parseFloat(dailyLimitMatch[1]);
+                
+                // Simulate daily usage (in real app, this would come from API)
+                // For demo, we'll use random value between 0 and the daily limit
+                const dailyUsedGB = Math.random() * dailyLimitGB * 0.8;
+                const dailyRemainingGB = dailyLimitGB - dailyUsedGB;
+                
+                // Format to 2 decimal places
+                const formattedUsed = dailyUsedGB.toFixed(2);
+                const formattedRemaining = dailyRemainingGB.toFixed(2);
+                const progressPercentage = (dailyUsedGB / dailyLimitGB) * 100;
+                
+                // Update progress bar
+                document.getElementById('dataProgress').style.width = `${progressPercentage}%`;
+                document.getElementById('dataUsed').textContent = `${formattedUsed} GB used`;
+                document.getElementById('dataTotal').textContent = `${dailyLimitGB} GB total`;
+                document.getElementById('dataRemaining').textContent = `${formattedRemaining} GB`;
+            }
+        }
+
+        // Display OTT benefits
+        function displayOTTBenefits(benefits) {
+            const ottContainer = document.getElementById('ottBenefits');
+            ottContainer.innerHTML = '';
+            
+            if (!benefits || benefits.length === 0) {
+                ottContainer.innerHTML = '<p class="text-muted">No OTT benefits available</p>';
+                return;
+            }
+            
+            const title = document.createElement('h5');
+            title.textContent = 'OTT Benefits';
+            title.className = 'mb-3';
+            ottContainer.appendChild(title);
+            
+            const benefitsRow = document.createElement('div');
+            benefitsRow.className = 'row g-3';
+            
+            // Create a Set to track unique OTT providers (to avoid duplicates)
+            const uniqueProviders = new Set();
+            
+            benefits.forEach(benefit => {
+                const provider = benefit.ottPlan.ottProvider;
+                
+                // Skip if we've already displayed this provider
+                if (uniqueProviders.has(provider.ottId)) return;
+                uniqueProviders.add(provider.ottId);
+                
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-3';
+                
+                const benefitCard = document.createElement('div');
+                benefitCard.className = 'ott-benefit-card';
+                
+                // Create OTT provider logo
+                const logo = document.createElement('img');
+                logo.src = getOTTLogoPath(provider.ottName);
+                logo.alt = `${provider.ottName} logo`;
+                logo.className = 'ott-logo';
+                
+                // Create plan details
+                const planName = document.createElement('p');
+                planName.className = 'mb-0 fw-bold';
+                planName.textContent = benefit.ottPlan.ottPlanName;
+                
+                const validity = document.createElement('small');
+                validity.className = 'text-muted';
+                validity.textContent = `${benefit.ottPlan.ottValidityMonths} month${benefit.ottPlan.ottValidityMonths > 1 ? 's' : ''}`;
+                
+                benefitCard.appendChild(logo);
+                benefitCard.appendChild(planName);
+                benefitCard.appendChild(validity);
+                
+                col.appendChild(benefitCard);
+                benefitsRow.appendChild(col);
+            });
+            
+            ottContainer.appendChild(benefitsRow);
+        }
+
+        // Get OTT logo path based on provider name
+        function getOTTLogoPath(providerName) {
+            const normalizedName = providerName.toLowerCase().replace(/\s+/g, '');
+            
+            const logoMap = {
+                'netflix': './assets/netflixbasic (1).svg',
+                'primevideo': './assets/amazonprime.svg',
+                'jiohotstar': './assets/Hotstar (1).svg',
+                'disney+': '/assets/images/ott/disney.svg'
+            };
+            
+            return logoMap[normalizedName] || '/assets/images/ott/default.svg';
+        }
+
+        // Show/hide loading spinner
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            if (show) {
+                spinner.classList.add('show');
+            } else {
+                spinner.classList.remove('show');
+            }
+        }
+
+        // Validation for mobile number
+        window.validateMobile = function(input) {
+            input.value = input.value.replace(/\D/g, ''); // Allow only numbers
+            const button = document.getElementById('submitButton');
+            const link = document.getElementById('submitLink');
+
+            button.disabled = input.value.length !== 10;
+            
+            if (button.disabled) {
+                link.removeAttribute("href"); // Prevents navigation
+            } else {
+                link.setAttribute("href", "prepaid plans.html"); // Allows navigation
+            }
+        };
+
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            
+            if (isLoggedIn !== "true") {
+                // User is not logged in, redirect to login page
+                window.location.href = "login.html";
+            }
+            }
+
+// Call the function when the page loads
+window.addEventListener("DOMContentLoaded", checkLoginStatus);
+        // Logout function
+        window.logout = function() {
+            sessionStorage.removeItem("currentUser"); // Remove user data
             localStorage.removeItem("isLoggedIn"); // Remove login status
             window.location.href = "index.html"; // Redirect to login page
-        }
-        const storedUser = JSON.parse(localStorage.getItem("currentUserDetails"));
-console.log(storedUser);
-        const validateMobile = input => { 
-    input.value = input.value.replace(/\D/g, ''); // Allow only numbers
-    const button = document.getElementById('submitButton');
-    const link = document.getElementById('submitLink');
+        };
 
-    button.disabled = input.value.length !== 10;
-    
-    if (button.disabled) {
-        link.removeAttribute("href"); // Prevents navigation
-    } else {
-        link.setAttribute("href", "prepaid plans.html"); // Allows navigation
-    }
-};
-
-    </script>
-    
+    });
+</script>
 </body>
 </html>

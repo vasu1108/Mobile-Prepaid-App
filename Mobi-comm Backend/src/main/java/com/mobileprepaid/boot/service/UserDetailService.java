@@ -24,6 +24,7 @@ public class UserDetailService {
         return userDetailsRepository.findAll();
     }
 
+    
     public UserDetail getUserDetailsById(int id) {
         return userDetailsRepository.findById(id).orElseThrow(() -> new RuntimeException("User details not found"));
     }

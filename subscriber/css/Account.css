@@ -1,141 +1,351 @@
+:root {
+    --primary: #e53e3e;
+    --primary-hover: #e53e3e;
+    --secondary: #e53e3e;
+    --success: #4fd1c5;
+    --danger: #e53e3e;
+    --warning: #f6e05e;
+    --info: #a4aaae;
+    --bg-light: #f8f9fa;
+    --text-primary: #333;
+    --text-secondary: #6c757d;
+    --white: #fff;
+    --border-color: #ddd;
+}
 
-body { background-color: #F8F8F8; }
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8F8F8;
+    padding-top: 60px;
+}
+
+/* Navigation */
 .navbar-toggler-icon {
    filter: invert(1);
 }
+
 .nav-link {
     color: whitesmoke;
-}
- .nav-link:hover {
-  color:  #E60000
- }
-.nav-link:focus, .nav-link:active {
-  color:  #E60000 !important;
-}
-.nav-item.active .nav-link {
-  color: #E60000 !important;
-}
- .nav-link .active {
-   color: #E60000;
- }
-/* .banner {
-    background: linear-gradient(90deg, #FFE8BA 0%, #FFF8E7 100%);
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-    position: relative;
-    overflow: hidden;
-}
-.banner-image {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    max-height: 120px;
-} */
-#recharge {
-    color: whitesmoke;
-}
-.data-card {
-    background-color: rgb(234, 219, 158);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 20px;
+    transition: color 0.3s ease;
 }
 
-.utility-icon {
-    width: 40px;
-    height: 40px;
-    padding: 8px;
-    border-radius: 8px;
-    background: white;
+.nav-link:hover {
+    color: #E60000;
+}
+
+.nav-link:focus, .nav-link:active {
+    color: #E60000 !important;
+}
+
+.nav-item.active .nav-link {
+    color: #E60000 !important;
+}
+
+/* User Profile */
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Current Plan Card */
+.current-plan-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f7f7ff 100%);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.current-plan-card:hover {
+    transform: translateY(-5px);
+}
+
+.plan-feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.plan-feature i {
+    font-size: 1.2rem;
+}
+
+.price-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.price {
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: var(--primary);
+}
+
+.recharge-btn {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.recharge-btn:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* OTT Benefits */
+.ott-benefits {
+    background-color: rgba(155, 135, 245, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+}
+
+.ott-benefit-card {
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: 100%;
+}
+
+.ott-logo {
+    width: 40px;
+    height: 40px;
     margin-bottom: 8px;
 }
-.action-button {
-    background-color: var(--vi-red);
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 8px 24px;
+
+/* Data Card */
+.data-card {
+    background: linear-gradient(135deg, #fff9f0 0%, #fff5e7 100%);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
 }
+
+.data-card:hover {
+    transform: translateY(-5px);
+}
+
+.progress-container {
+    margin: 20px 0;
+}
+
+.progress {
+    height: 12px;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    background-color: var(--primary);
+    border-radius: 6px;
+}
+
+.data-highlight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+
+.data-highlight i {
+    font-size: 1.5rem;
+}
+
+.data-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.data-circle-inner {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+}
+
+.data-circle-inner h3 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-bottom: 0;
+    color: var(--primary);
+}
+
+.data-circle-inner p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Feature Boxes */
+.feature-box {
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Feature Cards */
 .feature-card {
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 20px;
-    margin-bottom: 20px;
-    text-decoration: none;
-    color: inherit;
-    display: block;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: none;
 }
+
 .feature-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    color: inherit;
-}
-.utility-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 16px;
-    margin: 20px 0;
-}
-.utility-item {
-    text-align: center;
-    text-decoration: none;
-    color: var(--vi-dark);
-}
-.download-card {
-    background-color: #F5F6F7;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Footer */
 .footer-link {
-color: whitesmoke;
-text-decoration: none;
-font-size: 14px;
-line-height: 1.75rem;
-display: block;
-cursor: pointer;
-}
-.footer-link:hover {
-color: #E60000;
-}
-.footer-title {
-color: whitesmoke;
-font-size: 17px;
-font-weight: bold;
-padding-bottom: 25px;
-line-height: 1;
-}
-.social-icon {
-width: 24px;
-height: 24px;
-cursor: pointer;
-transition: opacity 0.2s;
-}
-.social-icon:hover {
-opacity: 0.8;
-}
-.company-description {
-color: whitesmoke;
-font-size: 12px;
-line-height: 1.5;
+    color: whitesmoke;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.75rem;
+    display: block;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-@media (max-width: 768px) {
-.footer-section {
-  padding: 0 1.25rem;
+.footer-link:hover {
+    color: #E60000;
 }
+
+.footer-title {
+    color: whitesmoke;
+    font-size: 17px;
+    font-weight: bold;
+    padding-bottom: 25px;
+    line-height: 1;
 }
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.social-icon:hover {
+    opacity: 0.8;
+}
+
+.company-description {
+    color: whitesmoke;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Dropdown */
 .profile-icon::after {
     display: none !important; /* Hides the dropdown arrow */
 }
 
-/* Hover effect for dropdown items */
 .dropdown-item:hover {
-    background-color: #b6b7b7 !important; /* Change background color on hover */
-    color: white !important; /* Change text color on hover */
+    background-color: #b6b7b7 !important;
+    color: white !important;
+}
+
+/* Loading Spinner */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.loading-overlay.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .price-section {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .data-circle {
+        margin: 20px auto;
+    }
+    
+    .footer-section {
+        padding: 0 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .current-plan-card, .data-card, .feature-box, .feature-card {
+        padding: 16px;
+    }
+    
+    .price {
+        font-size: 1.8rem;
+    }
+    
+    .data-circle {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .data-circle-inner {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .data-circle-inner h3 {
+        font-size: 1.2rem;
+    }
 }

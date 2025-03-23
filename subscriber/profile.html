@@ -4,86 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Settings</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/profile.css">
 </head>
-<body class="bg-light" >
-    <div class="container min-vh-100 d-flex justify-content-center align-items-center " >
-        <div class="card shadow-sm w-100" style="max-width: 600px; " >
-            <div class="card-body">
-                <a href="Account.html" class="btn btn-light rounded-circle p-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" class="bi bi-arrow-left" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                </a>
-                <h3 class="mb-4">Account Settings</h3>
-                <div id="settings-form"></div>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light border-bottom fixed-top py-3" style="background-color: #424B54;">
+        <div class="container-xxl">
+            <a class="navbar-brand" href="#">
+                <img src="./assets/logo-transparent-png.png" height="40" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: white;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link fw-medium" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link fw-medium" href="prepaid plans.html">Prepaid</a></li>
+                    <li class="nav-item"><a class="nav-link fw-medium" href="support.html">Support</a></li>
+                    <li class="nav-item"><a class="nav-link fw-medium" href="help.html">FAQ</a></li>
+                </ul>
+                <ul class="navbar-nav ms-auto align-items-center"> 
+                    <li><div class="dropdown">
+                        <a class="nav-link profile-icon dropdown-toggle text-white" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-4"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="Account.html">Dashboard</a></li>
+                            <li><a class="dropdown-item active" href="profile.html">My Account</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </div></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5" style="margin-top: 80px;">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow profile-card">
+                    <div class="card-header d-flex align-items-center bg-white py-3">
+                        <a href="Account.html" class="btn btn-light rounded-circle back-btn me-3">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        <h3 class="mb-0">Account Settings</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="profile-avatar-section text-center mb-4">
+                            <div class="avatar-container mx-auto">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <h4 id="user-name" class="mt-3 mb-0">Loading...</h4>
+                            <p id="user-mobile" class="text-muted">Loading...</p>
+                        </div>
+
+                        <div id="settings-form">
+                            <!-- Form fields will be added here dynamically -->
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Loading your profile details...</p>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button id="save-all-button" class="btn btn-primary px-4">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <script>
-        const userData = {
-            name: 'Shreenivasan S',
-            dob: '08 Nov, 2003',
-            mobile: '9876543210',
-            alternateContact: '8838523369',
-            email: 'user@example.com',
-            communicationLanguage: 'EN',
-            workDetails: 'Software Engineer',
-            address: '4-13, Dharmaiyan street no -3, Salem, Salem, Tn-636006'
-        };
-        
-        const nonEditableFields = ['dob', 'mobile', 'address'];
-        
-        function createField(key, value) {
-            const fieldGroup = document.createElement('div');
-            fieldGroup.className = 'mb-3';
-        
-            const label = document.createElement('label');
-            label.className = 'form-label fw-bold';
-            label.textContent = formatLabel(key);
-        
-            const valueContainer = document.createElement('div');
-            
-            if (nonEditableFields.includes(key)) {
-                valueContainer.innerHTML = `<p class='form-control-plaintext text-muted'>${value} <span class='text-secondary'>(Not editable)</span></p>`;
-            } else {
-                valueContainer.innerHTML = `<div class='input-group'>
-                    <input type='text' class='form-control' value='${value}' readonly />
-                    <button class='btn btn-outline-secondary edit-btn'>Edit</button>
-                </div>`;
-            }
-        
-            fieldGroup.appendChild(label);
-            fieldGroup.appendChild(valueContainer);
-            return fieldGroup;
-        }
-        
-        function formatLabel(key) {
-            return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-        }
-        
-        function initializeForm() {
-            const form = document.getElementById('settings-form');
-            for (const [key, value] of Object.entries(userData)) {
-                form.appendChild(createField(key, value));
-            }
-        
-            document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const input = this.previousElementSibling;
-                    input.readOnly = false;
-                    input.focus();
-                    this.textContent = 'Save';
-                    
-                    this.addEventListener('click', () => {
-                        input.readOnly = true;
-                        this.textContent = 'Edit';
-                    }, { once: true });
-                });
-            });
-        }
-        
-        document.addEventListener('DOMContentLoaded', initializeForm);
-    </script>
+
+    <!-- Toast Notification -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <strong class="me-auto" id="toast-title">Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-message">
+                Your profile has been updated successfully.
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="./js/profile.js"></script>
 </body>
 </html>

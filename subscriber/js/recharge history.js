@@ -196,6 +196,18 @@ document.addEventListener('DOMContentLoaded', function() {
             rechargeContainer.innerHTML = `<div class="col-12"><div class="alert alert-danger">Failed to load recharge history: ${error.message}</div></div>`;
         }
     }
+
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        
+        if (isLoggedIn !== "true") {
+          // User is not logged in, redirect to login page
+          window.location.href = "login.html";
+        }
+      }
+      
+      // Call the function when the page loads
+      window.addEventListener("DOMContentLoaded", checkLoginStatus);
     
     // Logout function
     window.logout = function() {

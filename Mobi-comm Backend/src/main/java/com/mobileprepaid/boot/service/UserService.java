@@ -2,6 +2,9 @@ package com.mobileprepaid.boot.service;
 
 import com.mobileprepaid.boot.model.User;
 import com.mobileprepaid.boot.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,10 +31,14 @@ public class UserService {
 
     public User updateUser(int id, User user) {
         User existingUser = getUserById(id);
+        
         existingUser.setName(user.getName());
         existingUser.setUserEmail(user.getUserEmail());
+        existingUser.setUserStatus(user.getUserStatus()); // Updating user status
+        
         return userRepository.save(existingUser);
     }
+
 
     public void deleteUser(int id) {
         userRepository.deleteById(id);
@@ -41,4 +48,13 @@ public class UserService {
         return userRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new RuntimeException("User not found with mobile number: " + mobileNumber));
     }
+    
+    public void updatePassword(int userId, String newPassword) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
+        existingUser.setPasswordHash(newPassword); // You should hash the password before saving
+        userRepository.save(existingUser);
+    }
+
 }

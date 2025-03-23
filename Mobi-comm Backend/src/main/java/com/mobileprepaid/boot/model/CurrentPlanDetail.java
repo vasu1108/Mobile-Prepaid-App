@@ -41,7 +41,7 @@ public class CurrentPlanDetail {
     private int callMinutesRemaining;
 
     @Column(nullable = false, length = 20)
-    private String planStatus; // 'Active', 'Expired', 'Suspended'
+    private String planStatus; // 'Active', 'Expired'
 
     @Column(nullable = false)
     private LocalDateTime lastUpdated;

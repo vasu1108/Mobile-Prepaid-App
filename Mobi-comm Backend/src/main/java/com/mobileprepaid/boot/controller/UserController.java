@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -48,4 +49,11 @@ public class UserController {
         User user = userService.getUserByMobile(mobileNumber);
         return ResponseEntity.ok(user);
     }
+    
+    @PutMapping("/{userId}/update-password")
+    public ResponseEntity<String> updatePassword(@PathVariable int userId, @RequestBody Map<String, String> passwordRequest) {
+        userService.updatePassword(userId, passwordRequest.get("newPassword"));
+        return ResponseEntity.ok("Password updated successfully.");
+    }
+
 }

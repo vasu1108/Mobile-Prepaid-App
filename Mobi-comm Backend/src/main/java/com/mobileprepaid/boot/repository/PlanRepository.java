@@ -12,4 +12,11 @@ import com.mobileprepaid.boot.model.Plan;
 public interface PlanRepository extends JpaRepository<Plan, Integer> {
 	
 	List<Plan> findByCategory_CategoryName(String categoryName);
+	
+	// Fetch all active plans
+    List<Plan> findByPlanStatus(String planStatus);
+
+ // Repository Method
+    List<Plan> findByCategoryCategoryNameAndPlanStatus(String categoryName, String planStatus);
+
 }

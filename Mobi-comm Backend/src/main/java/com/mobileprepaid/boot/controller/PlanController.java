@@ -58,4 +58,26 @@ public class PlanController {
         planService.deletePlan(id);
         return ResponseEntity.noContent().build();
     }
+    
+ // Get all active plans
+    @GetMapping("/active")
+    public ResponseEntity<List<Plan>> getAllActivePlans() {
+        List<Plan> activePlans = planService.getAllActivePlans();
+        return ResponseEntity.ok(activePlans);
+    }
+
+    // Get active plans by category ID
+    @GetMapping("/active-by-category")
+    public ResponseEntity<List<Plan>> getActivePlansByCategory(@RequestParam String category) {
+        List<Plan> activePlans = planService.getActivePlansByCategory(category);
+        return ResponseEntity.ok(activePlans);
+    }
+    
+    @PutMapping("/{planId}/deactivate")
+    public ResponseEntity<Plan> deactivatePlan(@PathVariable int planId) {
+        Plan updatedPlan = planService.deactivatePlan(planId);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
 }

@@ -65,6 +65,11 @@ body {
     font-size: 0.75rem;
 }
 
+/* Profile Dropdown */
+.profile-dropdown {
+    position: relative;
+}
+
 .profile-menu {
     display: flex;
     align-items: center;
@@ -84,6 +89,55 @@ body {
     border-radius: 50%;
 }
 
+.profile-dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 1000;
+    display: none;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    background-color: var(--white);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.3s ease;
+}
+
+.profile-dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    gap: 0.5rem;
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-light);
+    color: var(--primary);
+}
+
+.dropdown-item i {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.dropdown-item:hover i {
+    color: var(--primary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Wrapper and Sidebar */
 .wrapper {
     display: flex;
@@ -94,10 +148,11 @@ body {
     width: 250px;
     background: var(--white);
     border-right: 1px solid var(--border-color);
-    transition: all 0.3s;
+    transition: var(--transition);
     height: calc(100vh - 60px);
     position: fixed;
     overflow-y: auto;
+    z-index: 1020;
 }
 
 .sidebar-header {
@@ -106,29 +161,28 @@ body {
     text-align: center;
 }
 
-.sidebar .components li {
-    margin: 0.25rem 0;
+.sidebar .components {
+    padding: 1rem 0;
 }
 
-.sidebar .components li a {
+.sidebar ul li a {
     color: var(--text-secondary);
     text-decoration: none;
     display: flex;
     align-items: center;
     padding: 0.75rem 1.5rem;
-    transition: all 0.3s;
-    border-radius: 0.5rem;
-    margin: 0 0.5rem;
+    transition: var(--transition);
+    font-weight: 500;
     gap: 0.75rem;
 }
 
-.sidebar .components li a:hover, 
-.sidebar .components li.active a {
+.sidebar ul li a:hover, 
+.sidebar ul li.active a {
     background: var(--primary);
     color: var(--white);
 }
 
-.sidebar .components li a i {
+.sidebar ul li a i {
     font-size: 1.2rem;
 }
 
@@ -244,6 +298,56 @@ body {
 .btn-primary:hover {
     background: var(--primary-hover);
     border-color: var(--primary-hover);
+}
+
+/* Plan Badge */
+.plan-badge {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.5rem;
+}
+
+/* Small Spinner */
+.small-spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Toast styling */
+.toast {
+    background-color: var(--white);
+    border-left: 4px solid var(--primary);
+}
+
+/* Pagination styling */
+.pagination .page-link {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.pagination .page-link:hover {
+    background-color: var(--bg-light);
+    color: var(--primary);
+}
+
+/* Modal styling */
+.modal-content {
+    border-radius: 1rem;
+    border: none;
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color);
+}
+
+.modal-footer {
+    border-top-color: var(--border-color);
 }
 
 /* Responsive */

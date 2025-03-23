@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan Alert Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/index.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+  </head>
+  <body>
     <!-- Top Navigation -->
     <nav class="top-nav fixed-top">
         <div class="container-fluid">
@@ -30,9 +32,21 @@
                         <i class="bi bi-bell"></i>
                         <span class="badge">3</span>
                     </div>
-                    <div class="profile-menu">
-                        <img src="https://ui-avatars.com/api/?name=Admin+User" alt="Profile" class="profile-img">
-                        <span class="ms-2">Admin User</span>
+                    <div class="profile-dropdown">
+                        <div class="profile-menu" id="profileDropdownToggle">
+                            <img src="https://ui-avatars.com/api/?name=Admin+User" alt="Profile" class="profile-img">
+                            <span class="ms-2" id="profileUsername">Admin User</span>
+                            <i class="bi bi-chevron-down ms-2"></i>
+                        </div>
+                        <div class="dropdown-menu profile-dropdown-menu" id="profileDropdownMenu">
+                            <div class="dropdown-item" id="changePasswordBtn">
+                                <i class="bi bi-key"></i> Change Password
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" id="logoutBtn">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,8 +120,11 @@
 
                 <!-- Table Section -->
                 <div class="card table-card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Subscribers - Plans Expiring in 3 Days</h4>
+                        <div class="spinner-border text-primary small-spinner d-none" id="tableSpinner" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -117,11 +134,22 @@
                                         <th>Mobile No</th>
                                         <th>Name</th>
                                         <th>Plan</th>
+                                        <th>Expiry Date</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="subscriberTable"></tbody>
+                                <tbody id="expiringPlansTable"></tbody>
                             </table>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <div>
+                                    <span id="paginationInfo">Showing 1-5 of 10 entries</span>
+                                </div>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination" id="pagination">
+                                        <!-- Pagination will be generated dynamically -->
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,6 +177,118 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recharge History Modal -->
+    <div class="modal fade" id="rechargeHistoryModal" tabindex="-1" aria-labelledby="rechargeHistoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rechargeHistoryModalLabel">Recharge History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <h6 id="userDetails">User: <span id="userName"></span></h6>
+                            <p id="mobileDetails">Mobile: <span id="userMobile"></span></p>
+                        </div>
+                        <button class="btn btn-success btn-sm" id="downloadPdf">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="rechargeHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Plan</th>
+                                    <th>Amount</th>
+                                    <th>Payment Mode</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rechargeHistoryTableBody">
+                                <!-- Recharge history will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm">
+                        <div class="alert alert-danger d-none" id="passwordError"></div>
+                        <div class="alert alert-success d-none" id="passwordSuccess"></div>
+                        
+                        <!-- Current Password -->
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="currentPassword" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="currentPassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- New Password -->
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="newPassword" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="newPassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Confirm New Password -->
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="confirmPassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="savePasswordBtn">Change Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-bell-fill me-2 text-primary"></i>
+                <strong class="me-auto">Notification</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Notification sent successfully!
             </div>
         </div>
     </div>

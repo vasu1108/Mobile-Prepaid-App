@@ -33,11 +33,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Set up category tab clicks
-    document.querySelectorAll('.nav-link').forEach(tab => {
+    document.querySelectorAll('#category .nav-link').forEach(tab => {
         tab.addEventListener('click', function(e) {
             e.preventDefault();
             const category = this.getAttribute('data-category');
-            document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#category .nav-link').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             
             // Fetch and display plans for the selected category
@@ -80,29 +80,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         // Redirect to payment page
                         window.location.href = "payment.html";
                     } else {
-                        // If user not found, just store the mobile number
-                        localStorage.setItem('mobileNumber', mobileNumber);
-                        
-                        // Store selected plan
-                        if (selectedPlan) {
-                            localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
-                        }
-                        
-                        // Redirect to payment page
-                        window.location.href = "payment.html";
+                        // If user not found, show an alert and do not proceed
+                        alert("Not a registered mobile number. Please register first or use a different number.");
+                        // No redirection or storage happens here
                     }
                 } catch (error) {
                     console.error('Error fetching user details:', error);
-                    // In case of error, still proceed with the mobile number
-                    localStorage.setItem('mobileNumber', mobileNumber);
-                    
-                    // Store selected plan
-                    if (selectedPlan) {
-                        localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
-                    }
-                    
-                    // Redirect to payment page
-                    window.location.href = "payment.html";
+                    // Show alert for the error case as well
+                    alert("Error checking mobile number. Please try again later.");
+                    // No redirection or storage happens here
                 }
                 
                 rechargeModal.hide();
@@ -113,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Setup recharge now button for logged-in users
-    const rechargeNowBtn = document.querySelector('#rechargeModal1 .btn-primary');
+    const rechargeNowBtn = document.querySelector('#rechargeModal1 .btn-danger');
     if (rechargeNowBtn) {
         rechargeNowBtn.addEventListener('click', function() {
             if (selectedPlan) {
@@ -134,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Fetch plans by category
+    // Fetch plans by category - UPDATED to use the new endpoint
     async function fetchPlansByCategory(category) {
         try {
             // Display loading indicator
@@ -148,7 +134,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             `;
             
-            const url =  `http://localhost:8083/plans/category?category=${encodeURIComponent(category)}`
+            // Use the new endpoint
+            const url = `http://localhost:8083/plans/active-by-category?category=${encodeURIComponent(category)}`;
             
             console.log('Fetching plans from:', url);
             
@@ -276,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         
         // Attach event listeners to OTT badges
-        document.querySelectorAll('.ott-badge').forEach((badge, index) => {
+        document.querySelectorAll('.ott-badge').forEach((badge) => {
             badge.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const planIndex = this.getAttribute('data-plan-index');
@@ -328,12 +315,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get OTT icon path based on name
     function getOttIconPath(ottName) {
         const ottIcons = {
-            'Netflix': 'Netflix.svg',
-            'Prime Video': 'prime.svg',
-            'Jio Hotstar': 'Hotstar (1).svg',
-            'Sony LIV': 'sonyliv.svg',
-            'ZEE5': 'zee5.svg',
-            'Voot': 'voot.svg'
+            'Netflix': './assets/netflixbasic (1).svg',
+            'Prime Video': './assets/amazonprime.svg',
+            'Jio Hotstar': './assets/Hotstar (1).svg',
+            'Disney+': './assets/download.jpg'
         };
         
         return ottIcons[ottName] || 'placeholder.svg';
@@ -386,6 +371,23 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         });
     }
+});
+
+// Handle navigation links properly
+document.addEventListener("DOMContentLoaded", function() {
+    // Add click handlers only to the main navigation links, not the category tabs
+    document.querySelectorAll(".navbar-nav .nav-link").forEach(link => {
+        link.addEventListener("click", function() {
+            // Get the href attribute
+            const href = this.getAttribute("href");
+            
+            // If it's a valid URL and not a tab or toggle
+            if (href && href !== "#" && !href.startsWith('#')) {
+                window.location.href = href; // Navigate to the page
+            }
+            // We're not preventing default for actual navigation links
+        });
+    });
 });
 
 // Logout function
