@@ -427,6 +427,10 @@ body {
     overflow-y: auto;
 }
 
+.modal-content.modal-sm {
+    max-width: 400px;
+}
+
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -446,7 +450,7 @@ body {
     gap: 0.5rem;
 }
 
-.close, .close-edit, .close-delete {
+.close, .close-edit, .close-delete, .close-category, .close-edit-category, .close-delete-category, .close-manage-categories {
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--text-secondary);
@@ -459,7 +463,7 @@ body {
     transition: var(--transition);
 }
 
-.close:hover, .close-edit:hover, .close-delete:hover {
+.close:hover, .close-edit:hover, .close-delete:hover, .close-category:hover, .close-edit-category:hover, .close-delete-category:hover, .close-manage-categories:hover {
     background-color: var(--bg-light);
     color: var(--text-primary);
 }

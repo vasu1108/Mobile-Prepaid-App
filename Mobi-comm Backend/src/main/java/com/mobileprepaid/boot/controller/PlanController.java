@@ -35,9 +35,10 @@ public class PlanController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Plan> getPlanById(@PathVariable int id) {
-        Optional<Plan> plan = planService.getPlanById(id);
-        return plan.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Plan plan = planService.getPlanById(id);
+        return ResponseEntity.ok(plan);
     }
+
 
     @PostMapping
     public ResponseEntity<Plan> createPlan(@RequestBody Plan plan) {
@@ -46,12 +47,16 @@ public class PlanController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Plan> updatePlan(@PathVariable int id, @RequestBody Plan updatedPlan) {
-        if (planService.getPlanById(id).isPresent()) {
+        Plan existingPlan = planService.getPlanById(id);
+        
+        if (existingPlan != null) {
             updatedPlan.setPlanId(id);
             return ResponseEntity.ok(planService.savePlan(updatedPlan));
         }
+        
         return ResponseEntity.notFound().build();
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePlan(@PathVariable int id) {

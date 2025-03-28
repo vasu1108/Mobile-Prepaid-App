@@ -18,5 +18,7 @@ public interface PlanRepository extends JpaRepository<Plan, Integer> {
 
  // Repository Method
     List<Plan> findByCategoryCategoryNameAndPlanStatus(String categoryName, String planStatus);
+    
+    List<Plan> findByCategory_CategoryId(int categoryId);
 
 }

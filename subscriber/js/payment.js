@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        console.log(selectedPlan);
         if (selectedPlan) {
             // Update plan price
             const planPriceElement = document.querySelector('.plan-price');
@@ -143,6 +144,64 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Function to generate the email body
+    function generateEmailBody(userName, transaction, plan) {
+        return `
+            <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 5px;'>
+                <h2 style='color: #4CAF50;'>Mobi-Comm Recharge Successful</h2>
+                <p>Hello <strong>${userName}</strong>,</p>
+                <p>Your recent recharge was successful. Below are the details:</p>
+                <h3>Transaction Details</h3>
+                <ul>
+                    <li><strong>Transaction ID:</strong> ${transaction.transactionId}</li>
+                    <li><strong>Payment Mode:</strong> ${transaction.paymentMode}</li>
+                    <li><strong>Amount:</strong> ₹${transaction.transactionAmount}</li>
+                    <li><strong>Date & Time:</strong> ${new Date(transaction.transactionDate).toLocaleString()}</li>
+                </ul>
+                <h3>Plan Details</h3>
+                <ul>
+                    <li><strong>Validity:</strong> ${plan.validityDays} days</li>
+                    <li><strong>Data:</strong> ${plan.dataLimit}</li>
+                    <li><strong>Calls:</strong> ${plan.callLimit}</li>
+                    <li><strong>SMS:</strong> ${plan.smsLimit}</li>
+                </ul>
+                <p>Thank you for choosing Mobi-Comm!</p>
+            </div>`;
+    }
+
+    // Function to send email notification with transaction details
+    async function sendEmailNotification(transaction, planDetails, userDetails) {
+        try {
+            // Prepare email data
+            const emailData = {
+                userId: userDetails.userId,
+                userEmail: userDetails.userEmail,
+                userName: userDetails.name,
+                subject: "Mobi-Comm Recharge Successful",
+                body: generateEmailBody(userDetails.name, transaction, planDetails), // HTML body
+            };
+
+            // Send email using the API endpoint
+            const response = await fetch('http://localhost:8083/transactions/email/send', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(emailData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send email notification');
+            }
+
+            console.log('Email notification sent successfully');
+            return true;
+        } catch (error) {
+            console.error('Error sending email notification:', error);
+            return false;
+        }
+    }
+
     // Show success modal with transaction details
     async function showSuccessModal(transaction) {
         const lastTransaction = transaction || 
@@ -160,6 +219,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show modal
         const modal = new bootstrap.Modal(document.getElementById('successModal'));
         modal.show();
+
+        if (storedUser && selectedPlan) {
+            sendEmailNotification(lastTransaction, selectedPlan, storedUser)
+                .then(success => {
+                    if (success) {
+                        console.log('Recharge notification email sent to', storedUser.userEmail);
+                    }
+                });
+        }
     }
 
     // UPI Validation
@@ -377,7 +445,13 @@ document.addEventListener('DOMContentLoaded', function() {
         downloadBtn.addEventListener('click', generatePDF);
     }
 
-    // Attach event listeners to pay buttons
+    // Initialize UI
+    updateUIWithStoredData();
+    
+    // SOLUTION: Remove the additional event listeners from pay buttons
+    // The buttons already have onclick="validatePayment()" in HTML
+    // DO NOT add these event listeners
+    /*
     const payButtons = document.querySelectorAll('#pay-btn');
     payButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -385,9 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
             validatePayment();
         });
     });
-
-    // Initialize UI
-    updateUIWithStoredData();
+    */
 });
 
 function logout() {

@@ -197,13 +197,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch recharge history for a user
     async function fetchRechargeHistory(userId) {
         try {
-            const response = await fetch(`${API_BASE_URL}/recharges/${userId}`);
+            // Add pagination parameters or query params to fetch all records
+            const response = await fetch(`${API_BASE_URL}/recharges/user/${userId}`);
+            
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`Network response was not ok: ${response.status}`);
             }
+            
             const data = await response.json();
-            // Either handle array of recharges or a single recharge object
-            return Array.isArray(data) ? data : [data];
+            
+            // Check and handle the data format
+            if (Array.isArray(data)) {
+                return data; // Already an array of recharges
+            } else if (data.recharges && Array.isArray(data.recharges)) {
+                return data.recharges; // Extract from wrapper object
+            } else if (typeof data === 'object') {
+                return [data]; // Single recharge object, convert to array
+            } else {
+                console.warn('Unexpected data format returned from API');
+                return [];
+            }
         } catch (error) {
             console.error('Error fetching recharge history:', error);
             return [];

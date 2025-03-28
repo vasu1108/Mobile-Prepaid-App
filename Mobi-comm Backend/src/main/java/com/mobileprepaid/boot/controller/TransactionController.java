@@ -2,10 +2,14 @@ package com.mobileprepaid.boot.controller;
 
 import com.mobileprepaid.boot.model.Transaction;
 import com.mobileprepaid.boot.service.TransactionService;
+
+import jakarta.mail.MessagingException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/transactions")
@@ -39,5 +43,12 @@ public class TransactionController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    
+    @PostMapping("/email/send")
+    public ResponseEntity<Map<String, String>> sendTransactionEmail(@RequestBody Map<String, Object> emailData) {
+        transactionService.sendTransactionEmail(emailData);
+        return ResponseEntity.ok(Map.of("message", "Transaction email sent successfully"));
+    }
+
    
 }

@@ -1,5 +1,6 @@
 package com.mobileprepaid.boot.service;
 
+import com.mobileprepaid.boot.exception.ResourceNotFoundException;
 import com.mobileprepaid.boot.model.User;
 import com.mobileprepaid.boot.model.UserDetail;
 import com.mobileprepaid.boot.repository.UserDetailsRepository;
@@ -17,16 +18,16 @@ public class UserDetailService {
 
     public UserDetailService(UserDetailsRepository userDetailsRepository, UserRepository userRepository) {
         this.userDetailsRepository = userDetailsRepository;
-		this.userRepository = userRepository;
+        this.userRepository = userRepository;
     }
 
     public List<UserDetail> getAllUserDetails() {
         return userDetailsRepository.findAll();
     }
 
-    
     public UserDetail getUserDetailsById(int id) {
-        return userDetailsRepository.findById(id).orElseThrow(() -> new RuntimeException("User details not found"));
+        return userDetailsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User details not found for ID: " + id));
     }
 
     public UserDetail saveUserDetails(UserDetail userDetails) {
@@ -59,13 +60,16 @@ public class UserDetailService {
             }
 
             return userDetailsRepository.save(existingDetail);
-        }).orElseThrow(() -> new RuntimeException("UserDetail not found for userId: " + userId));
+        }).orElseThrow(() -> new ResourceNotFoundException("UserDetail not found for userId: " + userId));
     }
-    
+
     public void deleteUserDetails(int id) {
+        if (!userDetailsRepository.existsById(id)) {
+            throw new ResourceNotFoundException("UserDetail not found for ID: " + id);
+        }
         userDetailsRepository.deleteById(id);
     }
-    
+
     public Optional<UserDetail> getUserDetailByUserId(int userId) {
         return userDetailsRepository.findByUserUserId(userId);
     }

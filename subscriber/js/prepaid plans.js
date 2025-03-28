@@ -1,4 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Global variables
+    const API_URL = "http://localhost:8083";
+    let allCategories = [];
+    let allPlans = [];
+    let filteredPlans = [];
+    let currentCategory = "all";
+    let selectedPlan = null;
+
+    // Initialize UI elements
+    const categoryTabs = document.getElementById('categoryTabs');
+    const plansContainer = document.getElementById('plansContainer');
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const sortSelect = document.getElementById('sortSelect');
+
     // Setup FAQ interaction
     document.querySelectorAll(".faq-item").forEach(item => {
         item.addEventListener("click", function () {
@@ -23,109 +38,119 @@ document.addEventListener("DOMContentLoaded", function () {
     const rechargeModal = new bootstrap.Modal(document.getElementById('rechargeModal'));
     const rechargeModalLoggedIn = new bootstrap.Modal(document.getElementById('rechargeModal1'));
     const ottDetailsModal = new bootstrap.Modal(document.getElementById('ottDetailsModal'));
-    let selectedPlan = null;
 
-    // Fetch plans for the initially active category
-    const activeTab = document.querySelector('.nav-link.active');
-    if (activeTab) {
-        const initialCategory = activeTab.getAttribute('data-category');
-        fetchPlansByCategory(initialCategory);
-    }
+    // Fetch categories on page load
+    fetchCategories();
 
-    // Set up category tab clicks
-    document.querySelectorAll('#category .nav-link').forEach(tab => {
-        tab.addEventListener('click', function(e) {
-            e.preventDefault();
-            const category = this.getAttribute('data-category');
-            document.querySelectorAll('#category .nav-link').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Fetch and display plans for the selected category
-            fetchPlansByCategory(category);
-        });
+    // Event listeners for search and filter
+    searchButton.addEventListener('click', function() {
+        searchPlans();
     });
 
-    // Mobile number validation for recharge modal
-    const mobileInput = document.getElementById('mobileNumber');
-    const proceedBtn = document.getElementById('proceedBtn');
-    
-    if (mobileInput && proceedBtn) {
-        mobileInput.addEventListener('input', function() {
-            this.value = this.value.replace(/\D/g, ''); // Allow only numbers
-            proceedBtn.disabled = this.value.length !== 10;
-        });
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchPlans();
+        }
+    });
 
-        proceedBtn.addEventListener('click', async function() {
-            if (mobileInput.value.length === 10) {
-                const mobileNumber = mobileInput.value;
-                
-                try {
-                    // Fetch user details for the entered mobile number
-                    const response = await fetch(`http://localhost:8083/users/mobile/${mobileNumber}`);
-                    
-                    if (response.ok) {
-                        const userData = await response.json();
-                        
-                        // Store user data in localStorage without setting isLoggedIn to true
-                        localStorage.setItem("currentUserDetails", JSON.stringify(userData));
-                        
-                        // Store mobile number for payment page
-                        localStorage.setItem('mobileNumber', mobileNumber);
-                        
-                        // Store selected plan
-                        if (selectedPlan) {
-                            localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
-                        }
-                        
-                        // Redirect to payment page
-                        window.location.href = "payment.html";
-                    } else {
-                        // If user not found, show an alert and do not proceed
-                        alert("Not a registered mobile number. Please register first or use a different number.");
-                        // No redirection or storage happens here
-                    }
-                } catch (error) {
-                    console.error('Error fetching user details:', error);
-                    // Show alert for the error case as well
-                    alert("Error checking mobile number. Please try again later.");
-                    // No redirection or storage happens here
-                }
-                
-                rechargeModal.hide();
-                mobileInput.value = '';
-                proceedBtn.disabled = true;
+    sortSelect.addEventListener('change', function() {
+        sortPlans(this.value);
+    });
+
+    // Fetch all categories from API
+    async function fetchCategories() {
+        try {
+            const response = await fetch(`${API_URL}/categories/names`);
+            
+            if (!response.ok) {
+                throw new Error(`Failed to fetch categories: ${response.status} ${response.statusText}`);
             }
+            
+            allCategories = await response.json();
+            
+            console.log('Fetched categories:', allCategories);
+            
+            // Populate category tabs
+            populateCategoryTabs();
+            
+            // Load plans for the first category by default
+            if (allCategories && allCategories.length > 0) {
+                fetchPlansByCategory('all'); // Start with "All Plans"
+            } else {
+                showNoPlansMessage("No categories available");
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+            categoryTabs.innerHTML = `
+                <li class="nav-item">
+                    <div class="alert alert-danger m-3">
+                        Failed to load categories. Please try again later.
+                    </div>
+                </li>
+            `;
+        }
+    }
+
+    // Create tabs for each category
+    function populateCategoryTabs() {
+        categoryTabs.innerHTML = '';
+        
+        // Create the "All" category tab
+        const allTab = document.createElement('li');
+        allTab.className = 'nav-item';
+        allTab.innerHTML = `
+            <a class="nav-link active" data-category="all" href="#" role="tab">
+                All Plans
+            </a>
+        `;
+        categoryTabs.appendChild(allTab);
+        
+        // Add individual category tabs
+        allCategories.forEach((category, index) => {
+            const tab = document.createElement('li');
+            tab.className = 'nav-item';
+            tab.innerHTML = `
+                <a class="nav-link" data-category="${category.categoryName}" href="#" role="tab">
+                    ${category.categoryName}
+                </a>
+            `;
+            categoryTabs.appendChild(tab);
+        });
+        
+        // Add event listeners to tabs
+        document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all tabs
+                document.querySelectorAll('#categoryTabs .nav-link').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Get category from data attribute
+                const category = this.getAttribute('data-category');
+                currentCategory = category;
+                
+                // Clear search input
+                searchInput.value = '';
+                
+                // Reset sort select
+                sortSelect.value = '';
+                
+                // Fetch plans for selected category
+                fetchPlansByCategory(category);
+            });
         });
     }
 
-    // Setup recharge now button for logged-in users
-    const rechargeNowBtn = document.querySelector('#rechargeModal1 .btn-danger');
-    if (rechargeNowBtn) {
-        rechargeNowBtn.addEventListener('click', function() {
-            if (selectedPlan) {
-                // Store selected plan details
-                localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
-                
-                // If user is logged in, we already have their details
-                const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
-                
-                if (userDetails && userDetails.mobile) {
-                    // Store mobile number for payment page
-                    localStorage.setItem('mobileNumber', userDetails.mobile);
-                }
-                
-                // Redirect to payment page
-                window.location.href = "payment.html";
-            }
-        });
-    }
-
-    // Fetch plans by category - UPDATED to use the new endpoint
+    // Fetch plans by category
     async function fetchPlansByCategory(category) {
         try {
-            // Display loading indicator
-            const container = document.getElementById('plansContainer');
-            container.innerHTML = `
+            // Show loading spinner
+            plansContainer.innerHTML = `
                 <div class="col-12 text-center">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -134,42 +159,41 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             `;
             
-            // Use the new endpoint
-            const url = `http://localhost:8083/plans/active-by-category?category=${encodeURIComponent(category)}`;
+            let url;
+            
+            if (category === 'all') {
+                url = `${API_URL}/plans/active`;
+            } else {
+                url = `${API_URL}/plans/active-by-category?category=${encodeURIComponent(category)}`;
+            }
             
             console.log('Fetching plans from:', url);
             
             const response = await fetch(url);
             
-            // Debug the response
-            console.log('API response status:', response.status);
-            
             if (!response.ok) {
                 throw new Error(`Failed to fetch plans: ${response.status} ${response.statusText}`);
             }
             
-            const plans = await response.json();
-            console.log('Fetched plans:', plans);
+            let plans = await response.json();
             
-            if (!plans || plans.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12">
-                        <div class="alert alert-info">
-                            No plans available in this category.
-                        </div>
-                    </div>
-                `;
-                return;
+            // Ensure plans is an array
+            if (!Array.isArray(plans)) {
+                plans = [plans];
             }
             
-            // Display the fetched plans
-            displayPlans(plans);
+            console.log('Fetched plans:', plans);
+            
+            // Store all plans
+            allPlans = plans;
+            filteredPlans = [...plans];
+            
+            // Display plans
+            displayPlans(filteredPlans);
         } catch (error) {
             console.error('Error fetching plans:', error);
             
-            // Display error message in plans container
-            const container = document.getElementById('plansContainer');
-            container.innerHTML = `
+            plansContainer.innerHTML = `
                 <div class="col-12">
                     <div class="alert alert-danger">
                         Failed to load plans. Please try again later. (Error: ${error.message})
@@ -179,10 +203,66 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Display plans directly without categorization (since we're fetching by category)
+    // Search plans
+    function searchPlans() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        if (!searchTerm) {
+            // If search is empty, show all plans for current category
+            filteredPlans = [...allPlans];
+        } else {
+            // Filter plans based on search term
+            filteredPlans = allPlans.filter(plan => {
+                return (
+                    (plan.planName && plan.planName.toLowerCase().includes(searchTerm)) ||
+                    (plan.dataLimit && plan.dataLimit.toLowerCase().includes(searchTerm)) ||
+                    (plan.callLimit && plan.callLimit.toLowerCase().includes(searchTerm)) ||
+                    (plan.smsLimit && plan.smsLimit.toLowerCase().includes(searchTerm)) ||
+                    (plan.planPrice && plan.planPrice.toString().includes(searchTerm)) ||
+                    (plan.validityDays && plan.validityDays.toString().includes(searchTerm)) ||
+                    (plan.category && plan.category.categoryName && 
+                     plan.category.categoryName.toLowerCase().includes(searchTerm))
+                );
+            });
+        }
+        
+        // Display filtered plans
+        displayPlans(filteredPlans);
+    }
+
+    // Sort plans
+    function sortPlans(sortBy) {
+        if (!sortBy) return;
+        
+        filteredPlans.sort((a, b) => {
+            switch (sortBy) {
+                case "price-low":
+                    return a.planPrice - b.planPrice;
+                case "price-high":
+                    return b.planPrice - a.planPrice;
+                case "validity-high":
+                    return b.validityDays - a.validityDays;
+                case "data-high":
+                    // Simple string comparison for data - might need improvement
+                    // for proper comparison of GB/day vs MB/day
+                    return b.dataLimit.localeCompare(a.dataLimit);
+                default:
+                    return 0;
+            }
+        });
+        
+        // Display sorted plans
+        displayPlans(filteredPlans);
+    }
+
+    // Display plans
     function displayPlans(plans) {
-        const container = document.getElementById('plansContainer');
-        container.innerHTML = '';
+        plansContainer.innerHTML = '';
+        
+        if (!plans || plans.length === 0) {
+            showNoPlansMessage("No plans found for your search criteria");
+            return;
+        }
         
         // Display each plan
         plans.forEach((plan, index) => {
@@ -252,13 +332,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             `;
             
-            container.appendChild(card);
+            plansContainer.appendChild(card);
         });
         
         // Attach event listeners to buy buttons
         document.querySelectorAll('.buy-button').forEach((button, index) => {
             button.addEventListener('click', function() {
-                handleBuyClick(plans[index]);
+                handleBuyClick(filteredPlans[index]);
             });
         });
         
@@ -267,9 +347,22 @@ document.addEventListener("DOMContentLoaded", function () {
             badge.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const planIndex = this.getAttribute('data-plan-index');
-                showOttDetailsModal(plans[planIndex]);
+                showOttDetailsModal(filteredPlans[planIndex]);
             });
         });
+    }
+
+    // Show message when no plans found
+    function showNoPlansMessage(message) {
+        plansContainer.innerHTML = `
+            <div class="col-12">
+                <div class="no-plans-message">
+                    <i class="bi bi-search"></i>
+                    <h4>${message}</h4>
+                    <p class="text-muted">Try adjusting your search criteria or category selection.</p>
+                </div>
+            </div>
+        `;
     }
 
     // Handle buy button click
@@ -369,6 +462,81 @@ document.addEventListener("DOMContentLoaded", function () {
                     ${ottContent}
                 </div>
             `;
+        });
+    }
+
+    // Mobile number validation for recharge modal
+    const mobileInput = document.getElementById('mobileNumber');
+    const proceedBtn = document.getElementById('proceedBtn');
+    
+    if (mobileInput && proceedBtn) {
+        mobileInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, ''); // Allow only numbers
+            proceedBtn.disabled = this.value.length !== 10;
+        });
+
+        proceedBtn.addEventListener('click', async function() {
+            if (mobileInput.value.length === 10) {
+                const mobileNumber = mobileInput.value;
+                
+                try {
+                    // Fetch user details for the entered mobile number
+                    const response = await fetch(`${API_URL}/users/mobile/${mobileNumber}`);
+                    
+                    if (response.ok) {
+                        const userData = await response.json();
+                        
+                        // Store user data in localStorage without setting isLoggedIn to true
+                        localStorage.setItem("currentUserDetails", JSON.stringify(userData));
+                        
+                        // Store mobile number for payment page
+                        localStorage.setItem('mobileNumber', mobileNumber);
+                        
+                        // Store selected plan
+                        if (selectedPlan) {
+                            localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+                        }
+                        
+                        // Redirect to payment page
+                        window.location.href = "payment.html";
+                    } else {
+                        // If user not found, show an alert and do not proceed
+                        alert("Not a registered mobile number. Please register first or use a different number.");
+                        // No redirection or storage happens here
+                    }
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                    // Show alert for the error case as well
+                    alert("Error checking mobile number. Please try again later.");
+                    // No redirection or storage happens here
+                }
+                
+                rechargeModal.hide();
+                mobileInput.value = '';
+                proceedBtn.disabled = true;
+            }
+        });
+    }
+
+    // Setup recharge now button for logged-in users
+    const rechargeNowBtn = document.querySelector('#rechargeModal1 #proceedBtn');
+    if (rechargeNowBtn) {
+        rechargeNowBtn.addEventListener('click', function() {
+            if (selectedPlan) {
+                // Store selected plan details
+                localStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+                
+                // If user is logged in, we already have their details
+                const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
+                
+                if (userDetails && userDetails.mobile) {
+                    // Store mobile number for payment page
+                    localStorage.setItem('mobileNumber', userDetails.mobile);
+                }
+                
+                // Redirect to payment page
+                window.location.href = "payment.html";
+            }
         });
     }
 });

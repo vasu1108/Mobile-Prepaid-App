@@ -2,9 +2,13 @@ package com.mobileprepaid.boot.controller;
 
 import com.mobileprepaid.boot.model.User;
 import com.mobileprepaid.boot.service.UserService;
+
+import jakarta.mail.MessagingException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +58,26 @@ public class UserController {
     public ResponseEntity<String> updatePassword(@PathVariable int userId, @RequestBody Map<String, String> passwordRequest) {
         userService.updatePassword(userId, passwordRequest.get("newPassword"));
         return ResponseEntity.ok("Password updated successfully.");
+    }
+    
+    @PostMapping("/email/send")
+    public ResponseEntity<Map<String, String>> sendEmail(@RequestBody Map<String, String> request) {
+        try {
+            String to = request.get("to");
+            String subject = request.get("subject");
+            String body = request.get("body");
+
+            userService.sendEmail(to, subject, body);
+
+            // Return JSON response
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Email sent successfully");
+            return ResponseEntity.ok(response);
+        } catch (MessagingException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Failed to send email");
+            return ResponseEntity.status(500).body(errorResponse);
+        }
     }
 
 }

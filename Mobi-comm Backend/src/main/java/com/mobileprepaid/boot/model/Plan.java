@@ -22,7 +22,7 @@ public class Plan {
     private int planId;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     @JsonBackReference 
   
     private Category category;

@@ -1,5 +1,7 @@
 package com.mobileprepaid.boot.service;
 
+import com.mobileprepaid.boot.exception.ResourceNotFoundException;
+import com.mobileprepaid.boot.exception.DataIntegrityViolationException;
 import com.mobileprepaid.boot.model.CurrentPlanDetail;
 import com.mobileprepaid.boot.repository.CurrentPlanDetailRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,11 @@ public class CurrentPlanDetailService {
     }
 
     public List<CurrentPlanDetail> getAllCurrentPlans() {
-        return currentPlanDetailRepository.findAll();
+        List<CurrentPlanDetail> plans = currentPlanDetailRepository.findAll();
+        if (plans.isEmpty()) {
+            throw new ResourceNotFoundException("No active current plans found.");
+        }
+        return plans;
     }
 
     public CurrentPlanDetail updateCurrentPlan(int userId, CurrentPlanDetail updatedDetails) {
@@ -36,9 +42,14 @@ public class CurrentPlanDetailService {
                     existingPlan.setCallMinutesUsed(updatedDetails.getCallMinutesUsed());
                     existingPlan.setCallMinutesRemaining(updatedDetails.getCallMinutesRemaining());
                     existingPlan.setLastUpdated(LocalDateTime.now());
-                    return currentPlanDetailRepository.save(existingPlan);
+
+                    try {
+                        return currentPlanDetailRepository.save(existingPlan);
+                    } catch (DataIntegrityViolationException e) {
+                        throw new DataIntegrityViolationException("Error updating current plan due to database constraints.");
+                    }
                 })
-                .orElseThrow(() -> new RuntimeException("Current Plan not found for user ID: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("Current Plan not found for user ID: " + userId));
     }
 
     public CurrentPlanDetail activateOrExpirePlan(int userId, String status) {
@@ -48,11 +59,17 @@ public class CurrentPlanDetailService {
                     plan.setLastUpdated(LocalDateTime.now());
                     return currentPlanDetailRepository.save(plan);
                 })
-                .orElseThrow(() -> new RuntimeException("Plan not found for user ID: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("Plan not found for user ID: " + userId));
     }
-    
+
     public List<CurrentPlanDetail> getPlansExpiringSoon() {
         LocalDate threeDaysFromNow = LocalDate.now().plusDays(3);
-        return currentPlanDetailRepository.findByPlanExpiryDate(threeDaysFromNow);
+        List<CurrentPlanDetail> plans = currentPlanDetailRepository.findByPlanExpiryDate(threeDaysFromNow);
+        
+        if (plans.isEmpty()) {
+            throw new ResourceNotFoundException("No plans expiring in 3 days.");
+        }
+        
+        return plans;
     }
 }
