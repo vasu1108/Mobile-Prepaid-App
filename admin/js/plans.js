@@ -111,6 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Setup modal close buttons
     setupModalCloseHandlers();
+    
+    console.log("DOM Content Loaded and event listeners setup");
 });
 
 // Setup modal close handlers for all modals
@@ -142,6 +144,8 @@ function setupModalCloseHandlers() {
     // Manage Categories Modal
     if (closeManageCategoriesBtn) closeManageCategoriesBtn.addEventListener("click", closeManageCategoriesModal);
     if (closeManageCategoriesModal) closeManageCategoriesModal.addEventListener("click", closeManageCategoriesModal);
+    
+    console.log("Modal close handlers setup");
 }
 
 // Helper function to show loading spinner
@@ -188,6 +192,7 @@ function showError(message) {
 async function loadCategories() {
     try {
         showLoading();
+        console.log("Loading categories from API");
         const response = await fetch(`${API_URL}/categories/names`);
         
         if (!response.ok) {
@@ -195,6 +200,7 @@ async function loadCategories() {
         }
         
         allCategories = await response.json();
+        console.log("Categories loaded:", allCategories);
         
         // Ensure data is an array
         if (!Array.isArray(allCategories)) {
@@ -241,6 +247,8 @@ function populateCategoryDropdowns() {
         editOption.textContent = category.categoryName;
         editCategorySelect.appendChild(editOption);
     });
+    
+    console.log("Category dropdowns populated");
 }
 
 // Load categories for the manage categories modal
@@ -285,6 +293,7 @@ function loadCategoriesTable() {
         `;
         categoriesTableBody.appendChild(row);
     });
+    console.log("Categories table loaded");
 }
 
 // Function to open manage categories modal
@@ -293,6 +302,7 @@ function openManageCategoriesModal() {
     
     loadCategoriesTable();
     manageCategoriesModal.style.display = "block";
+    console.log("Opened manage categories modal");
 }
 
 // Function to open edit category modal
@@ -302,7 +312,10 @@ function openEditCategoryModal(categoryId, categoryName) {
     document.getElementById("editCategoryId").value = categoryId;
     document.getElementById("editCategoryName").value = categoryName;
     editCategoryModal.style.display = "block";
+    console.log("Opened edit category modal for:", categoryName);
 }
+
+
 
 // Function to open delete category modal
 function openDeleteCategoryModal(categoryId, categoryName) {
@@ -311,6 +324,7 @@ function openDeleteCategoryModal(categoryId, categoryName) {
     document.getElementById("deleteCategoryId").value = categoryId;
     document.getElementById("deleteCategoryName").textContent = categoryName;
     deleteCategoryModal.style.display = "block";
+    console.log("Opened delete category modal for:", categoryName);
 }
 
 // Function to edit a category
@@ -339,6 +353,7 @@ async function updateCategory() {
     
     try {
         showLoading();
+        console.log(`Updating category ${categoryId} with name: ${categoryName}`);
         const response = await fetch(`${API_URL}/categories/${categoryId}`, {
             method: "PUT",
             headers: {
@@ -352,6 +367,7 @@ async function updateCategory() {
         }
         
         const updatedCategory = await response.json();
+        console.log("Category updated successfully:", updatedCategory);
         
         // Update the category in the allCategories array
         const index = allCategories.findIndex(c => c.categoryId == categoryId);
@@ -365,6 +381,7 @@ async function updateCategory() {
         // Update category dropdowns
         populateCategoryDropdowns();
         
+        // Close modal first, then show success message
         closeEditCategoryModal();
         showToast("Category updated successfully!", "success");
         
@@ -391,13 +408,16 @@ async function deleteCategory() {
     
     try {
         showLoading();
-        const response = await fetch(`${API_URL}/categories/${categoryId}`, {
+        console.log(`Deleting category with ID: ${categoryId}`);
+        const response = await fetch(`${API_URL}/categories/${categoryId}/deactivate-plans`, {
             method: "DELETE"
         });
         
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
+        
+        console.log("Category deleted successfully");
         
         // Remove the category from the allCategories array
         allCategories = allCategories.filter(c => c.categoryId != categoryId);
@@ -408,6 +428,7 @@ async function deleteCategory() {
         // Update category dropdowns
         populateCategoryDropdowns();
         
+        // Close modal first, then show success message
         closeDeleteCategoryModal();
         showToast("Category deleted successfully!", "success");
         
@@ -709,6 +730,7 @@ async function loadPlans(category = "all", sortBy = "") {
             url = `${API_URL}/plans/active-by-category?category=${encodeURIComponent(category)}`;
         }
         
+        console.log("Loading plans from:", url);
         const response = await fetch(url);
         
         if (!response.ok) {
@@ -716,6 +738,7 @@ async function loadPlans(category = "all", sortBy = "") {
         }
         
         let plans = await response.json();
+        console.log("Plans loaded:", plans);
         
         // Normalize to array if single object
         if (!Array.isArray(plans)) {
@@ -802,6 +825,7 @@ async function addCategory() {
     
     try {
         showLoading();
+        console.log("Adding new category:", categoryName);
         const response = await fetch(`${API_URL}/categories`, {
             method: "POST",
             headers: {
@@ -815,6 +839,7 @@ async function addCategory() {
         }
         
         const newCategory = await response.json();
+        console.log("Category added successfully:", newCategory);
         
         // Update categories list
         if (!Array.isArray(allCategories)) {
@@ -825,6 +850,7 @@ async function addCategory() {
         // Repopulate dropdowns
         populateCategoryDropdowns();
         
+        // Close modal first, then show success message
         closeAddCategoryModal();
         
         // Clear input
@@ -944,6 +970,7 @@ async function addPlan() {
     
     try {
         showLoading();
+        console.log("Adding new plan:", plan);
         const response = await fetch(`${API_URL}/plans`, {
             method: "POST",
             headers: {
@@ -956,6 +983,9 @@ async function addPlan() {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         
+        console.log("Plan added successfully");
+        
+        // Close modal first, then show success message
         closeAddPlanModal();
         resetAddPlanForm();
         loadPlans(currentCategory, sortSelect ? sortSelect.value : "");
@@ -1077,6 +1107,7 @@ async function updatePlan() {
     
     try {
         showLoading();
+        console.log("Updating plan:", plan);
         const response = await fetch(`${API_URL}/plans/${planId}`, {
             method: "PUT",
             headers: {
@@ -1089,6 +1120,9 @@ async function updatePlan() {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         
+        console.log("Plan updated successfully");
+        
+        // Close modal first, then show success message
         closeEditPlanModal();
         loadPlans(currentCategory, sortSelect ? sortSelect.value : "");
         
@@ -1114,6 +1148,7 @@ async function deletePlan() {
     
     try {
         showLoading();
+        console.log(`Deactivating plan with ID: ${planId}`);
         const response = await fetch(`${API_URL}/plans/${planId}/deactivate`, {
             method: "PUT",
             headers: {
@@ -1126,6 +1161,9 @@ async function deletePlan() {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         
+        console.log("Plan deactivated successfully");
+        
+        // Close modal first, then show success message
         closeDeletePlanModal();
         loadPlans(currentCategory, sortSelect ? sortSelect.value : "");
         showToast("Plan deactivated successfully!", "success");
@@ -1211,6 +1249,7 @@ function openEditPlanModal(planId) {
     
     if (editPlanModal) {
         editPlanModal.style.display = "block";
+        console.log("Opened edit plan modal for:", plan.planName);
     }
 }
 
@@ -1233,6 +1272,7 @@ function openDeletePlanModal(planId, planName) {
     document.getElementById("deletePlanName").textContent = planName;
     
     deletePlanModal.style.display = "block";
+    console.log("Opened delete plan modal for:", planName);
 }
 
 // Helper function to get provider name from ID
@@ -1252,6 +1292,7 @@ function getProviderName(providerId) {
 function closeAddCategoryModal() {
     if (addCategoryModal) {
         addCategoryModal.style.display = "none";
+        console.log("Closed add category modal");
     }
 }
 
@@ -1263,6 +1304,7 @@ function closeAddCategoryModal() {
 function closeAddPlanModal() {
     if (addPlanModal) {
         addPlanModal.style.display = "none";
+        console.log("Closed add plan modal");
     }
 }
 
@@ -1270,6 +1312,7 @@ function closeAddPlanModal() {
 function closeEditPlanModal() {
     if (editPlanModal) {
         editPlanModal.style.display = "none";
+        console.log("Closed edit plan modal");
     }
 }
 
@@ -1277,6 +1320,7 @@ function closeEditPlanModal() {
 function closeDeletePlanModal() {
     if (deletePlanModal) {
         deletePlanModal.style.display = "none";
+        console.log("Closed delete plan modal");
     }
 }
 
@@ -1476,3 +1520,4 @@ window.closeAddCategoryModal = closeAddCategoryModal;
 window.closeEditCategoryModal = closeEditCategoryModal;
 window.closeDeleteCategoryModal = closeDeleteCategoryModal;
 window.closeManageCategoriesModal = closeManageCategoriesModal;
+
