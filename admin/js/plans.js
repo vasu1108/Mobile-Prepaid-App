@@ -134,16 +134,16 @@ function setupModalCloseHandlers() {
     if (closeCategoryModal) closeCategoryModal.addEventListener("click", closeAddCategoryModal);
     
     // Edit Category Modal
-    if (closeEditCategoryBtn) closeEditCategoryBtn.addEventListener("click", closeEditCategoryModal);
-    if (closeEditCategoryModal) closeEditCategoryModal.addEventListener("click", closeEditCategoryModal);
+    if (closeEditCategoryBtn) closeEditCategoryBtn.addEventListener("click", closeEditCategoriesModal);
+    if (closeEditCategoryModal) closeEditCategoryModal.addEventListener("click", closeEditCategoriesModal);
     
     // Delete Category Modal
-    if (closeDeleteCategoryBtn) closeDeleteCategoryBtn.addEventListener("click", closeDeleteCategoryModal);
-    if (closeDeleteCategoryModal) closeDeleteCategoryModal.addEventListener("click", closeDeleteCategoryModal);
+    if (closeDeleteCategoryBtn) closeDeleteCategoryBtn.addEventListener("click", closeDeleteCategoriesModal);
+    if (closeDeleteCategoryModal) closeDeleteCategoryModal.addEventListener("click", closeDeleteCategoriesModal);
     
     // Manage Categories Modal
-    if (closeManageCategoriesBtn) closeManageCategoriesBtn.addEventListener("click", closeManageCategoriesModal);
-    if (closeManageCategoriesModal) closeManageCategoriesModal.addEventListener("click", closeManageCategoriesModal);
+    if (closeManageCategoriesBtn) closeManageCategoriesBtn.addEventListener("click", closeManageCategoryModal);
+    if (closeManageCategoriesModal) closeManageCategoriesModal.addEventListener("click", closeManageCategoryModal);
     
     console.log("Modal close handlers setup");
 }
@@ -302,7 +302,17 @@ function openManageCategoriesModal() {
     
     loadCategoriesTable();
     manageCategoriesModal.style.display = "block";
+    document.body.classList.add('modal-open');
     console.log("Opened manage categories modal");
+}
+
+// // Function to close manage categories modal
+function closeManageCategoryModal() {
+    if (manageCategoriesModal) {
+        manageCategoriesModal.style.display = "none";
+        document.body.classList.remove('modal-open');
+        console.log("Closed manage categories modal");
+    }
 }
 
 // Function to open edit category modal
@@ -312,10 +322,18 @@ function openEditCategoryModal(categoryId, categoryName) {
     document.getElementById("editCategoryId").value = categoryId;
     document.getElementById("editCategoryName").value = categoryName;
     editCategoryModal.style.display = "block";
+    document.body.classList.add('modal-open');
     console.log("Opened edit category modal for:", categoryName);
 }
 
-
+// Function to close edit category modal
+function closeEditCategoriesModal() {
+    if (editCategoryModal) {
+        editCategoryModal.style.display = "none";
+        document.body.classList.remove('modal-open');
+        console.log("Closed edit category modal");
+    }
+}
 
 // Function to open delete category modal
 function openDeleteCategoryModal(categoryId, categoryName) {
@@ -324,7 +342,17 @@ function openDeleteCategoryModal(categoryId, categoryName) {
     document.getElementById("deleteCategoryId").value = categoryId;
     document.getElementById("deleteCategoryName").textContent = categoryName;
     deleteCategoryModal.style.display = "block";
+    document.body.classList.add('modal-open');
     console.log("Opened delete category modal for:", categoryName);
+}
+
+// Function to close delete category modal
+function closeDeleteCategoriesModal() {
+    if (deleteCategoryModal) {
+        deleteCategoryModal.style.display = "none";
+        document.body.classList.remove('modal-open');
+        console.log("Closed delete category modal");
+    }
 }
 
 // Function to edit a category
@@ -382,7 +410,7 @@ async function updateCategory() {
         populateCategoryDropdowns();
         
         // Close modal first, then show success message
-        closeEditCategoryModal();
+        closeEditCategoriesModal();
         showToast("Category updated successfully!", "success");
         
         // Reload plans to reflect the updated category
@@ -409,7 +437,7 @@ async function deleteCategory() {
     try {
         showLoading();
         console.log(`Deleting category with ID: ${categoryId}`);
-        const response = await fetch(`${API_URL}/categories/${categoryId}/deactivate-plans`, {
+        const response = await fetch(`${API_URL}/categories/${categoryId}`, {
             method: "DELETE"
         });
         
@@ -429,7 +457,7 @@ async function deleteCategory() {
         populateCategoryDropdowns();
         
         // Close modal first, then show success message
-        closeDeleteCategoryModal();
+        closeDeleteCategoriesModal();
         showToast("Category deleted successfully!", "success");
         
         // Reload plans to reflect the deleted category
@@ -1249,6 +1277,7 @@ function openEditPlanModal(planId) {
     
     if (editPlanModal) {
         editPlanModal.style.display = "block";
+        document.body.classList.add('modal-open');
         console.log("Opened edit plan modal for:", plan.planName);
     }
 }
@@ -1272,6 +1301,7 @@ function openDeletePlanModal(planId, planName) {
     document.getElementById("deletePlanName").textContent = planName;
     
     deletePlanModal.style.display = "block";
+    document.body.classList.add('modal-open');
     console.log("Opened delete plan modal for:", planName);
 }
 
@@ -1286,24 +1316,11 @@ function getProviderName(providerId) {
     }
 }
 
-
-
-// Function to close add category modal
-function closeAddCategoryModal() {
-    if (addCategoryModal) {
-        addCategoryModal.style.display = "none";
-        console.log("Closed add category modal");
-    }
-}
-
-
-
-
-
 // Function to close add plan modal
 function closeAddPlanModal() {
     if (addPlanModal) {
         addPlanModal.style.display = "none";
+        document.body.classList.remove('modal-open');
         console.log("Closed add plan modal");
     }
 }
@@ -1312,6 +1329,7 @@ function closeAddPlanModal() {
 function closeEditPlanModal() {
     if (editPlanModal) {
         editPlanModal.style.display = "none";
+        document.body.classList.remove('modal-open');
         console.log("Closed edit plan modal");
     }
 }
@@ -1320,7 +1338,17 @@ function closeEditPlanModal() {
 function closeDeletePlanModal() {
     if (deletePlanModal) {
         deletePlanModal.style.display = "none";
+        document.body.classList.remove('modal-open');
         console.log("Closed delete plan modal");
+    }
+}
+
+// Function to close add category modal
+function closeAddCategoryModal() {
+    if (addCategoryModal) {
+        addCategoryModal.style.display = "none";
+        document.body.classList.remove('modal-open');
+        console.log("Closed add category modal");
     }
 }
 
@@ -1434,14 +1462,20 @@ if (editOttCheckboxes) {
 if (addPlanBtn) {
     addPlanBtn.addEventListener("click", () => {
         resetAddPlanForm();
-        if (addPlanModal) addPlanModal.style.display = "block";
+        if (addPlanModal) {
+            addPlanModal.style.display = "block";
+            document.body.classList.add('modal-open');
+        }
     });
 }
 
 if (addCategoryBtn) {
     addCategoryBtn.addEventListener("click", () => {
         if (document.getElementById("categoryName")) document.getElementById("categoryName").value = "";
-        if (addCategoryModal) addCategoryModal.style.display = "block";
+        if (addCategoryModal) {
+            addCategoryModal.style.display = "block";
+            document.body.classList.add('modal-open');
+        }
     });
 }
 
@@ -1474,13 +1508,13 @@ window.addEventListener("click", (event) => {
         closeDeletePlanModal();
     }
     if (editCategoryModal && event.target === editCategoryModal) {
-        closeEditCategoryModal();
+        closeEditCategoriesModal();
     }
     if (deleteCategoryModal && event.target === deleteCategoryModal) {
-        closeDeleteCategoryModal();
+        closeDeleteCategoriesModal();
     }
     if (manageCategoriesModal && event.target === manageCategoriesModal) {
-        closeManageCategoriesModal();
+        closeManageCategoryModal();
     }
 });
 
@@ -1520,4 +1554,3 @@ window.closeAddCategoryModal = closeAddCategoryModal;
 window.closeEditCategoryModal = closeEditCategoryModal;
 window.closeDeleteCategoryModal = closeDeleteCategoryModal;
 window.closeManageCategoriesModal = closeManageCategoriesModal;
-
